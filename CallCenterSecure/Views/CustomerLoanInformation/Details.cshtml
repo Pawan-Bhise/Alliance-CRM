@@ -1,0 +1,155 @@
+﻿@model CallCenter.Models.CustomerLoanInformation
+
+@{
+    ViewBag.Title = "Customer Loan Information Details";
+}
+
+<h2>Customer Loan Information Details</h2>
+
+<div>
+    <h4>Personal Information</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.CustomerLoanId)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerLoanId)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CustomerContactNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerContactNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.AccountType)</dt>
+        <dd>@Html.DisplayFor(model => model.AccountType)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.StaffID)</dt>
+        <dd>@Html.DisplayFor(model => model.StaffID)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.GroupMemberNo)</dt>
+        <dd>@Html.DisplayFor(model => model.GroupMemberNo)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.GroupCode)</dt>
+        <dd>@Html.DisplayFor(model => model.GroupCode)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_CustomerName)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_CustomerName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_Gender)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_Gender)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_Salutation)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_Salutation)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_DateOfBirth)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_DateOfBirth)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_ClientAge)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_ClientAge)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_FatherName)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_FatherName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_MotherName)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_MotherName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_MaritalStatus)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_MaritalStatus)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_SpouseName)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_SpouseName)</dd>
+
+        @*<dt>@Html.DisplayNameFor(model => model.PI_CustomerPhoto)</dt>
+        <dd>
+            @if (Model.PI_CustomerPhoto != null)
+            {
+                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.PI_CustomerPhoto)" alt="Customer Photo" />
+            }
+        </dd>*@
+
+        <dt>@Html.DisplayNameFor(model => model.PI_EducationalQualification)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_EducationalQualification)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_NRC)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_NRC)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_StateRegion)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_StateRegion)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_District)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_District)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_City)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_City)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_VillageTractTown)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_VillageTractTown)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_VillageWard)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_VillageWard)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_Area)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_Area)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PI_Address)</dt>
+        <dd>@Html.DisplayFor(model => model.PI_Address)</dd>
+    </dl>
+
+    <h4>Business Information</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.BI_IsBusinessAddressSameAsHome)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_IsBusinessAddressSameAsHome)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_StateRegion)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_StateRegion)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_District)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_District)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_City)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_City)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_VillageTractTown)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_VillageTractTown)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_VillageWard)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_VillageWard)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_Area)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_Area)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.BI_Address)</dt>
+        <dd>@Html.DisplayFor(model => model.BI_Address)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PrimaryMobileNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.PrimaryMobileNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.AlternateMobileNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.AlternateMobileNumber)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Latitude)</dt>
+        <dd>@Html.DisplayFor(model => model.Latitude)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Longitude)</dt>
+        <dd>@Html.DisplayFor(model => model.Longitude)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Branch)</dt>
+        <dd>@Html.DisplayFor(model => model.Branch)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ClientOfficerName)</dt>
+        <dd>@Html.DisplayFor(model => model.ClientOfficerName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ProductInterested)</dt>
+        <dd>@Html.DisplayFor(model => model.ProductInterested)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CustomerStatus)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerStatus)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.CreatedOn)</dt>
+        <dd>@Html.DisplayFor(model => model.CreatedOn)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.ModifiedOn)</dt>
+        <dd>@Html.DisplayFor(model => model.ModifiedOn)</dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerLoanId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

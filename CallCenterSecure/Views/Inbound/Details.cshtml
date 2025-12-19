@@ -1,0 +1,41 @@
+﻿@model CallCenterSecure.Models.InboundCall
+
+@{
+    ViewBag.Title = "Inbound Call Details";
+}
+
+<h2>Inbound Call Details</h2>
+
+<div>
+    <h4>Inbound Call</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CallerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CallerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CallDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CallDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</div>

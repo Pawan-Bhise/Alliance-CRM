@@ -1,0 +1,46 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.7.1",
+      "destination": "Scripts/jquery/"
+    },
+    {
+      "library": "jqueryui@1.14.1",
+      "destination": "Scripts/jqueryui/"
+    },
+    {
+      "library": "jquery-validate@1.21.0",
+      "destination": "Scripts/jquery-validate/"
+    },
+    {
+      "library": "bootstrap@5.3.8",
+      "destination": "Scripts/bootstrap/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.10.0",
+      "destination": "Scripts/bootstrap-datepicker/"
+    },
+    {
+      "library": "bootstrap-datetimepicker@6.7.13",
+      "destination": "Scripts/bootstrap-datetimepicker/"
+    },
+    {
+      "library": "modernizr@2.8.3",
+      "destination": "Scripts/modernizr/"
+    },
+    {
+      "library": "d3@7.9.0",
+      "destination": "Scripts/d3/"
+    },
+    {
+      "library": "moment.js@2.30.1",
+      "destination": "Scripts/moment.js/"
+    },
+    {
+      "library": "c3@0.7.20",
+      "destination": "Scripts/c3/"
+    }
+  ]
+}

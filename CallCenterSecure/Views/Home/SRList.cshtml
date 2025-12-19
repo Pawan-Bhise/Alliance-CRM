@@ -1,0 +1,271 @@
+﻿@model CallCenter.Models.SRManagementModel
+
+@{
+    ViewBag.Title = "SRList";
+}
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<h2>SR Management</h2>
+
+
+@using (Html.BeginForm())
+{
+<div class="row padingtop-bottom20px">
+    <div class="row">
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.TicketOpenDate, new { htmlAttributes = new { @class = "form-control", placeholder = "From date" } })
+            @Html.ValidationMessageFor(model => model.TicketOpenDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.TicketCloseDate, new { htmlAttributes = new { @class = "form-control", placeholder = "To date" } })
+            @Html.ValidationMessageFor(model => model.TicketCloseDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter phone number" } })
+        </div>
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter customer name" } })
+        </div>
+        <div class="col-md-2">
+            @Html.EditorFor(model => model.Remark, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter policy number" } })
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-2">
+            @Html.DropDownListFor(model => model.Status, new SelectList(new[] {new SelectListItem { Text = "Select Status", Value = "Select Status" },
+                                                                                new SelectListItem { Text = "Open", Value = "Open" },
+                                                                                 new SelectListItem { Text = "InProgress", Value = "InProgress" },
+                                                                                 new SelectListItem { Text = "Closed", Value = "Closed" }
+                                                                            }, "Text", "Value"), new { @class = "form-control" })
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Apply" class="btn btn-primary" />
+        </div>
+        <div class="col-md-8">
+            <input type="button" id="btnDownladExcel" class="btn btn-primary" value="Download Excel" onclick="exportToExcel('testTable', 'Excel Export')" style="float:right" />
+            @*<input type="button" id="btnDownladExcel" class="btn btn-primary" value="Download Excel" style="float:right" />*@
+            <input type="button" name="btnCreateTicket" class="btn btn-primary" value="Create SR" style="float:right;margin-right: 10px;" onclick="window.location= '@Url.Action("SRManagement", "Home")'" />
+        </div>
+    </div>
+
+</div>
+}
+
+<table class="table" id="testTable">
+    <tr>
+        <th>
+            @Html.DisplayName("SR ID")
+        </th>
+        <th>
+            @Html.DisplayName("Customer Name")
+        </th>
+        <th>
+            @Html.DisplayName("Phone No")
+        </th>
+        <th>
+            @Html.DisplayName("Policy Number")
+        </th>
+        <th>
+            @Html.DisplayName("Client Type")
+        </th>
+        <th>
+            @Html.DisplayName("Agent Name")
+        </th>
+        <th>
+            @Html.DisplayName("Type Of Caller")
+        </th>
+        <th>
+            @Html.DisplayName("Segment")
+        </th>
+        <th>
+            @Html.DisplayName("Type Of Call")
+        </th>
+        <th>
+            @Html.DisplayName("Issue Details")
+        </th>
+        <th>
+            @Html.DisplayName("Category")
+        </th>
+        <th>
+            @Html.DisplayName("Sub Category")
+        </th>
+        <th>
+            @Html.DisplayName("Sub Sub Category")
+        </th>
+
+        <th>
+            @Html.DisplayName("Status")
+        </th>
+        <th>
+            @Html.DisplayName("SR Open Date")
+        </th>
+        <th>
+            @Html.DisplayName("SR Close Date")
+        </th>
+        <th>
+            @Html.DisplayName("SR Open Agent")
+        </th>
+        <th>
+            @Html.DisplayName("Action by")
+        </th>
+        <th>
+            @Html.DisplayName("Resoluction Feedback")
+        </th>
+        <th>
+            @Html.DisplayName("SLA Bridge")
+        </th>
+    </tr>
+
+    @foreach (var item in Model.SRList.OrderByDescending(d => d.TicketOpenDate))
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.SRId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CustomerName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.PhoneNo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Remark)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ClientType)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AgentName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TypeOfCaller)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CustomerSegment)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TypeOfCall)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RequestComplaintDetails)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Category)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SubCategory)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.SubSubCategory)
+    </td>
+
+    <td>
+        @Html.DisplayFor(modelItem => item.Status)
+    </td>
+    <td>
+        @if (item.TicketOpenDate != null)
+        {
+            @Html.DisplayFor(modelItem => item.TicketOpenDate)
+        }
+    </td>
+    <td>
+        @if (item.TicketCloseDate != null)
+        {
+            @Html.DisplayFor(modelItem => item.TicketCloseDate)
+        }
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TicketOpenAgentName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TicketCloseAgentName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ResoluctionFeedback)
+    </td>
+    <td>
+        @if (item.SlaBridge != null && item.SlaBridge == "YES")
+        {
+            <span style="color:red">@item.SlaBridge</span>
+        }
+        else
+        {
+            @Html.DisplayFor(modelItem => item.SlaBridge)
+        }
+
+    </td>
+    <td>
+        @if ((item.Status == null) || (item.Status.ToLower() != "closed"))
+        {
+            @Html.ActionLink("Edit", "SRManagementEdit", new { Id = item.SRId })
+        }
+    </td>
+</tr>
+    }
+
+</table>
+
+<style>
+    .btn {
+        padding: 5px 8px;
+    }
+</style>
+@section Scripts {
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('input[type=datetime]').datepicker({
+                dateFormat: "dd/mm/yy",
+                setDate: new Date(),
+                changeMonth: true,
+                changeYear: true
+            });
+
+
+          /*  $("#btnDownladExcel").click(function () {
+                $.ajax(
+                    {
+                        url: '/Home/SRDownloadExcel?opendate=' + $("#TicketOpenDate").val() + '&closedate=' + $("#TicketCloseDate").val() + '&callingno=' + $("#PhoneNo").val() + '&status=' + $("#Status").val(),
+                        type: 'GET',
+                        data: "",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            var blob = new Blob([data], { type: 'application/ms-excel' });
+                            var downloadUrl = URL.createObjectURL(blob);
+                            var a = document.createElement("a");
+                            a.href = downloadUrl;
+                            a.download = "SRListExcel.xls";
+                            document.body.appendChild(a);
+                            a.click();
+                        },
+                        error: function () {
+                            alert("error");
+                        }
+                    });
+
+            }); */
+
+        });
+
+
+         function exportToExcel (table, name) {
+                            var uri = 'data:application/vnd.ms-excel;base64,'
+                                ,template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+                                , base64 = function (s) {
+                                    return window.btoa(unescape(encodeURIComponent(s)))
+                                }
+                                , format = function (s, c) {
+                                    return s.replace(/{(\w+)}/g, function (m, p) {
+                                        return c[p];
+                                    })
+                                }
+                            if (!table.nodeType) table = document.getElementById(table)
+                            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+                            var a = document.createElement('a');
+                            a.href = uri + base64(format(template, ctx))
+                            a.download = 'srlist.xls';
+                            //triggering the function
+                            a.click();
+                        }
+    </script>
+}

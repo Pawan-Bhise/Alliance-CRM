@@ -1,0 +1,578 @@
+﻿using CallCenter.CustomAuthentication;
+using CallCenter.Models;
+using CallCenter.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web.Mvc;
+using System.Data;
+using System.Data.SqlClient;   // or Npgsql/MySql depending on DB
+using Dapper;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using CallCenterSecure.Repositories;
+using System.Text;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.EMMA;
+
+namespace CallCenter.Controllers
+{
+    public class AllianceInboundController : Controller
+    {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        private CustomerRepository customerRepository = new CustomerRepository();
+
+        // GET: AllianceInbound/Create
+        public ActionResult Create()
+        {
+            PopulateDropdowns();
+            return View();
+        }
+        public JsonResult GetBranches(string region)
+        {
+            var branches = db.RegionBranches
+                             .Where(r => r.Region == region)
+                             .Select(r => new
+                             {
+                                 Value = r.Id,
+                                 Text = r.BranchName
+                             })
+                             .ToList();
+            return Json(branches, JsonRequestBehavior.AllowGet);
+        }
+
+        // POST: AllianceInbound/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(AllianceInbound allianceInbound)
+        {
+            bool isCreate = false;
+            try
+            {
+                allianceInbound.AgentName = ((CustomPrincipal)User).FirstName + " " + ((CustomPrincipal)User).LastName;
+                allianceInbound.CallStartDateTime = DateTime.Now;
+                string ticketID = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+                allianceInbound.TicketID = ticketID;
+
+                if (ModelState.IsValid)
+                {
+
+                    if (allianceInbound.File != null && allianceInbound.File.ContentLength > 0)
+                    {
+                        // Generate a unique file name
+                        var fileName = Path.GetFileName(allianceInbound.File.FileName);
+                        var uniqueFileName = fileName + DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour +
+                                            DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond + Path.GetExtension(fileName);
+
+                        // Save the file to a folder
+                        var path = Path.Combine(Server.MapPath("~/Uploads"), uniqueFileName);
+                        allianceInbound.File.SaveAs(path);
+
+                        allianceInbound.FileName = uniqueFileName;
+                        allianceInbound.FilePath = path;
+                    }
+
+                    db.AllianceInbounds.Add(allianceInbound);
+                    db.SaveChanges();
+                    isCreate = true;
+                    TempData["SuccessMessage"] = "Record created successfully!";
+                }
+
+                PopulateDropdowns();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Something went wrong. Please try again.";
+            }
+
+            if (isCreate)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(allianceInbound);
+            }
+        }
+
+        // GET: AllianceInbound/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AllianceInbound allianceInbound = db.AllianceInbounds.Find(id);
+            if (allianceInbound == null)
+            {
+                return HttpNotFound();
+            }
+            
+            //clear spacing
+            allianceInbound.Cmp_Branch = Normalize(allianceInbound.Cmp_Branch);
+            //allianceInbound.Cmp_ComplainToDesignation = allianceInbound.Cmp_ComplainToDesignation.Trim();
+
+            PopulateDropdowns();
+
+            //    var region = allianceInbound?.Region;
+            //    //Get branches 
+
+            //    var branches = db.RegionBranches
+            //                     .Where(r => r.Region == region)
+            //                     .Select(r => new
+            //                     {
+            //                         Value = r.Id,
+            //                         Text = r.BranchName
+            //                     })
+            //                     .ToList();
+
+            //    ViewBag.SeletedBranches = new SelectList(
+            //branches.Select(b => b.Text).ToList(),
+            //allianceInbound.Branch?.Trim()
+            //);
+
+
+            return View(allianceInbound);
+        }
+
+        // POST: AllianceInbound/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(AllianceInbound allianceInbound)
+        {
+            allianceInbound.ModifiedOn = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //Verify if Prev Ticket Id provided
+                    //If exist create new ticket
+
+                    if (allianceInbound.File != null && allianceInbound.File.ContentLength > 0)
+                    {
+                        // Generate a unique file name
+                        var fileName = Path.GetFileName(allianceInbound.File.FileName);
+                        var uniqueFileName = fileName.Replace(Path.GetExtension(fileName), "") + DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Hour +
+                                            DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond + Path.GetExtension(fileName);
+
+                        // Save the file to a folder
+                        var path = Path.Combine(Server.MapPath("~/Uploads"), uniqueFileName);
+                        allianceInbound.File.SaveAs(path);
+
+                        allianceInbound.FileName = uniqueFileName;
+                        allianceInbound.FilePath = path;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(allianceInbound.Prev_TicketId))
+                    {
+                        allianceInbound.CallStartDateTime = DateTime.Now;
+                        string ticketID = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
+                        allianceInbound.TicketID = ticketID;
+
+                        //Blank prev ticket for new 
+                        allianceInbound.Prev_TicketId = allianceInbound.Prev_TicketId;
+
+                        db.Entry(allianceInbound).State = EntityState.Added;
+                        db.AllianceInbounds.Add(allianceInbound);
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "New ticket created successfully!";
+                    }
+                    else
+                    {
+                        db.Entry(allianceInbound).State = EntityState.Modified;
+                        db.SaveChanges();
+                        TempData["SuccessMessage"] = "Record updated successfully!";
+                    }
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+            }
+            PopulateDropdowns();
+            return View(allianceInbound);
+        }
+
+        private void PopulateDropdowns()
+        {
+            // Load distinct region names
+            //var cascadeRegion = db.RegionBranches
+            //.Select(r => r.Region)
+            //.Distinct()
+            //.ToList();
+
+            ViewBag.CascadeRegion = new SelectList(db.RegionBranches.Select(c => new { Value = c.Region, Text = c.Region }).Distinct(), "Value", "Text");
+            //ViewBag.Branches = new SelectList(db.AllianceBranches.Select(b => new { Value = b.BranchName, Text = b.BranchName }), "Value", "Text");
+            //ViewBag.Branches = new SelectList(db.RegionBranches.Select(b => new { Value = b.BranchName, Text = b.BranchName }).ToList(), "Value", "Text");
+
+            //ViewBag.Branches = new SelectList(
+            //db.RegionBranches
+            //  .Where(d => d.BranchName != null && d.BranchName != "")
+            //  .Select(d => d.BranchName)
+            //  .Distinct()
+            //  .OrderBy(d => d)
+            //  .Select(d => new { Value = Normalize(d), Text = Normalize(d) }),
+            //"Value",
+            //"Text"
+            //);
+            ViewBag.Branches = new SelectList(
+            db.RegionBranches
+              .Where(d => d.BranchName != null && d.BranchName != "")
+              .Select(d => d.BranchName)
+              .Distinct()
+              .OrderBy(d => d)
+              .ToList() // ⭐ VERY IMPORTANT (execute SQL here)
+              .Select(d => new
+              {
+                  Value = Normalize(d),
+                  Text = Normalize(d)
+              }),
+                    "Value",
+            "Text"
+            );
+
+            //ViewBag.CascadeRegion = new SelectList(cascadeRegion);
+
+            // Branches will load dynamically via AJAX (empty initially)
+            //ViewBag.CascadeBranch = new SelectList(new List<string>());
+
+            ViewBag.CallObjectives = new SelectList(db.CallObjectives.Select(c => new { Value = c.Id, Text = c.Name }), "Value", "Text");
+            ViewBag.Regions = new SelectList(db.Regions.Select(r => new { Value = r.Id, Text = r.Name }), "Value", "Text");
+            ViewBag.NaDispositions = new SelectList(db.NaDisposition.Select(c => new { Value = c.Id, Text = c.Name }), "Value", "Text");
+            ViewBag.CmpDispositions = new SelectList(db.CmpDisposition.Select(c => new { Value = c.Id, Text = c.Name }), "Value", "Text");
+
+            ViewBag.Origins = new SelectList(db.Origins.Select(o => new { Value = o.Id, Text = o.Name }), "Value", "Text");
+            ViewBag.Products = new SelectList(db.Products.Select(p => new { Value = p.Id, Text = p.Name }), "Value", "Text");
+            ViewBag.TicketTypes = new SelectList(db.TicketTypes.Select(t => new { Value = t.Id, Text = t.Name }), "Value", "Text");
+            ViewBag.TicketStatuses = new SelectList(db.TicketStatuses.Select(ts => new { Value = ts.Id, Text = ts.Name }), "Value", "Text");
+
+            // Additional dropdowns for dependent fields
+            ViewBag.Districts = new SelectList(db.Districts.Select(d => new { Value = d.DistrictCode, Text = d.DistrictName }), "Value", "Text");
+            ViewBag.Cities = new SelectList(db.Cities.Select(c => new { Value = c.CityCode, Text = c.CityName }), "Value", "Text");
+            ViewBag.VillageTracts = new SelectList(db.VillageTracts.Select(vt => new { Value = vt.VillageTractCode, Text = vt.VillageTractName }), "Value", "Text");
+            ViewBag.Villages = new SelectList(db.Villages.Select(v => new { Value = v.VillageCode, Text = v.VillageName }), "Value", "Text");
+            //ViewBag.Designations = new SelectList(db.AllianceDesignations.Distinct(d=>d.Designation).Select(d => new { Value = d.DesignationID, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
+            ViewBag.Designations = new SelectList(
+            db.AllianceDesignations
+              .Where(d => d.Designation != null && d.Designation != "")
+              .Select(d => d.Designation)
+              .Distinct()
+              .OrderBy(d => d)
+              .Select(d => new { Value = d, Text = d }),
+            "Value",
+            "Text"
+            );
+            //ViewBag.ComplainTo = new SelectList(db.AllianceDesignations.Where(d => d.EmailAddress != string.Empty && d.EmailAddress != null).Select(d => new { Value = d.EmailAddress, Text = d.EmailAddress }), "Value", "Text");
+            //ViewBag.Designations = new SelectList(db.Designations.Select(d => new { Value = d.DesignationId, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
+            ViewBag.ComplainTo = new SelectList(db.Designations.Select(d => new { Value = d.DesignationId, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
+        }
+        private void PopulateDropdownsIndex()
+        {
+            ViewBag.TicketTypes = new SelectList(db.TicketTypes.Select(t => new { Value = t.Id, Text = t.Name }), "Value", "Text");
+            ViewBag.TicketStatuses = new SelectList(db.TicketStatuses.Select(ts => new { Value = ts.Id, Text = ts.Name }), "Value", "Text");
+        }
+
+        public ActionResult Index(AllianceInboundIndexVM filter)
+        {
+            var query = customerRepository.GetDataAll();
+
+            if (filter.FromDate.HasValue)
+                query = query.Where(x => x.DateTime.Date >= filter.FromDate.Value.Date);
+
+            if (filter.ToDate.HasValue)
+                query = query.Where(x => x.DateTime.Date <= filter.ToDate.Value.Date);
+
+            if (!string.IsNullOrEmpty(filter.PhoneNumber))
+                query = query.Where(x => x.PhoneNumber.Contains(filter.PhoneNumber));
+
+            if (!string.IsNullOrWhiteSpace(filter.TicketTypeId))
+                query = query.Where(x => x.TicketTypeId == filter.TicketTypeId);
+
+            if (!string.IsNullOrWhiteSpace(filter.TicketStatusId))
+                query = query.Where(x => x.TicketStatusId == filter.TicketStatusId);
+
+            if (!string.IsNullOrEmpty(filter.TicketId))
+                query = query.Where(x => x.TicketID == filter.TicketId);
+
+            if (query != null)
+            {
+                filter.InboundList = query.ToList();
+            }
+
+            PopulateDropdownsIndex();
+
+            return View(filter);
+        }
+
+
+        // GET: AllianceInbound/Index
+        //public ActionResult Index()
+        //{
+        //    var inBound = db.AllianceInbounds.ToList();
+        //    return View(inBound);
+        //}
+        //public ActionResult Index()
+        //{
+
+        //    var inBound = db.AllianceInbounds.ToList();
+
+
+        //    foreach (var item in inBound)
+        //    {
+        //        int num = Convert.ToInt32(item.TicketType);
+        //        item.TicketTypeName = db.TicketTypes.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+        //        item.BranchName = db.AllianceBranches.Where(tt => tt.BranchCode == item.Branch).Select(p => p.BranchName).FirstOrDefault();
+        //        num = Convert.ToInt32(item.TicketStatus);
+        //        item.TicketStatusName = db.TicketStatuses.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+        //        num = Convert.ToInt32(item.CallObjective);
+        //        item.CallObjectiveName = db.CallObjectives.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+        //        num = Convert.ToInt32(item.Region);
+        //        item.RegionName = db.Regions.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        num = Convert.ToInt32(item.Origin);
+        //        item.OriginName = db.Origins.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+        //        //Lead Branch State etc
+        //        num = Convert.ToInt32(item.Lead_Branch);
+        //        item.LeadBranchName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        num = Convert.ToInt32(item.Lead_StateRegion);
+        //        item.LeadStateRegionName = db.Regions.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        num = Convert.ToInt32(item.Lead_ProductInterested);
+        //        item.LeadProductInterestedName = db.Products.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        item.LeadDistrictName = db.Districts.Where(tt => tt.DistrictCode == item.Lead_District).Select(p => p.DistrictName).FirstOrDefault();
+        //        item.LeadCityTownshipName = db.Cities.Where(tt => tt.CityCode == item.Lead_CityTownship).Select(p => p.CityName).FirstOrDefault();
+        //        item.LeadVillageTractTownName = db.Villages.Where(tt => tt.VillageCode == item.Lead_VillageTractTown).Select(p => p.VillageName).FirstOrDefault();
+        //        item.LeadVillageWardName = db.VillageTracts.Where(tt => tt.VillageTractCode == item.Lead_VillageWard).Select(p => p.VillageTractName).FirstOrDefault();
+
+        //        // Complain attributes name
+        //        num = Convert.ToInt32(item.Cmp_Region);
+        //        item.CmpRegionName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        num = Convert.ToInt32(item.Cmp_Branch);
+        //        item.CmpBranchName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+        //        item.CmpDistrictName = db.Districts.Where(tt => tt.DistrictCode == item.Cmp_District).Select(p => p.DistrictName).FirstOrDefault();
+        //        item.CmpCityTownshipName = db.Cities.Where(tt => tt.CityCode == item.Cmp_CityTownship).Select(p => p.CityName).FirstOrDefault();
+        //        item.CmpVillageTractTownName = db.Villages.Where(tt => tt.VillageCode == item.Cmp_VillageTractTown).Select(p => p.VillageName).FirstOrDefault();
+        //        item.CmpVillageWardName = db.VillageTracts.Where(tt => tt.VillageTractCode == item.Cmp_VillageWard).Select(p => p.VillageTractName).FirstOrDefault();
+
+        //        num = Convert.ToInt32(item.Product);
+        //        item.ProductName = db.Products.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+        //    }
+
+        //    AllianceInbound allianceInbound = new AllianceInbound();
+        //    allianceInbound.AllianceInboundList = inBound;
+
+        //    ViewBag.TicketTypes = new SelectList(db.TicketTypes.Select(t => new { Value = t.Id, Text = t.Name }), "Value", "Text");
+        //    ViewBag.TicketStatuses = new SelectList(db.TicketStatuses.Select(ts => new { Value = ts.Id, Text = ts.Name }), "Value", "Text");
+
+        //    //return View(inBound);
+        //    return View(allianceInbound);
+        //}
+
+
+        // GET: AllianceInbound/Index
+        [HttpPost]
+        public ActionResult Index(AllianceInbound allianceInbound)
+        {
+
+            var inBound = db.AllianceInbounds.ToList();
+
+            if (!string.IsNullOrEmpty(allianceInbound.PhoneNumber))
+                inBound = inBound.Where(tl => tl.PhoneNumber == allianceInbound.PhoneNumber).ToList();
+            if (!string.IsNullOrEmpty(allianceInbound.TicketStatus))
+                inBound = inBound.Where(tl => tl.TicketStatus == allianceInbound.TicketStatus).ToList();
+            if (!string.IsNullOrEmpty(allianceInbound.TicketType))
+                inBound = inBound.Where(tl => tl.TicketType == allianceInbound.TicketType).ToList();
+
+            if (allianceInbound.FromDate != null)
+                inBound = inBound.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date >= Convert.ToDateTime(allianceInbound.FromDate).Date).ToList();
+            if (allianceInbound.ToDate != null)
+                inBound = inBound.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date <= Convert.ToDateTime(allianceInbound.ToDate).Date).ToList();
+            if (!string.IsNullOrWhiteSpace(allianceInbound.TicketID))
+            {
+                inBound = inBound.Where(tl => tl.TicketID == allianceInbound.TicketID).ToList();
+            }
+
+            foreach (var item in inBound)
+            {
+                int num = Convert.ToInt32(item.TicketType);
+                item.TicketTypeName = db.TicketTypes.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+                item.BranchName = db.AllianceBranches.Where(tt => tt.BranchCode == item.Branch).Select(p => p.BranchName).FirstOrDefault();
+                num = Convert.ToInt32(item.TicketStatus);
+                item.TicketStatusName = db.TicketStatuses.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+                num = Convert.ToInt32(item.CallObjective);
+                item.CallObjectiveName = db.CallObjectives.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+                num = Convert.ToInt32(item.Region);
+                item.RegionName = db.Regions.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+                num = Convert.ToInt32(item.Origin);
+                item.OriginName = db.Origins.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+                //Lead Branch State etc
+                num = Convert.ToInt32(item.Lead_Branch);
+                item.LeadBranchName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+                num = Convert.ToInt32(item.Lead_StateRegion);
+                item.LeadStateRegionName = db.Regions.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+                num = Convert.ToInt32(item.Lead_ProductInterested);
+                item.LeadProductInterestedName = db.Products.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+                item.LeadDistrictName = db.Districts.Where(tt => tt.DistrictCode == item.Lead_District).Select(p => p.DistrictName).FirstOrDefault();
+                item.LeadCityTownshipName = db.Cities.Where(tt => tt.CityCode == item.Lead_CityTownship).Select(p => p.CityName).FirstOrDefault();
+                item.LeadVillageTractTownName = db.Villages.Where(tt => tt.VillageCode == item.Lead_VillageTractTown).Select(p => p.VillageName).FirstOrDefault();
+                item.LeadVillageWardName = db.VillageTracts.Where(tt => tt.VillageTractCode == item.Lead_VillageWard).Select(p => p.VillageTractName).FirstOrDefault();
+
+                // Complain attributes name
+                num = Convert.ToInt32(item.Cmp_Region);
+                item.CmpRegionName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+                num = Convert.ToInt32(item.Cmp_Branch);
+                item.CmpBranchName = db.Branches.Where(tt => tt.Id == num).Select(p => p.Name).FirstOrDefault();
+
+                item.CmpDistrictName = db.Districts.Where(tt => tt.DistrictCode == item.Cmp_District).Select(p => p.DistrictName).FirstOrDefault();
+                item.CmpCityTownshipName = db.Cities.Where(tt => tt.CityCode == item.Cmp_CityTownship).Select(p => p.CityName).FirstOrDefault();
+                item.CmpVillageTractTownName = db.Villages.Where(tt => tt.VillageCode == item.Cmp_VillageTractTown).Select(p => p.VillageName).FirstOrDefault();
+                item.CmpVillageWardName = db.VillageTracts.Where(tt => tt.VillageTractCode == item.Cmp_VillageWard).Select(p => p.VillageTractName).FirstOrDefault();
+
+            }
+
+            allianceInbound.AllianceInboundList = inBound;
+
+            ViewBag.TicketTypes = new SelectList(db.TicketTypes.Select(t => new { Value = t.Id, Text = t.Name }), "Value", "Text");
+            ViewBag.TicketStatuses = new SelectList(db.TicketStatuses.Select(ts => new { Value = ts.Id, Text = ts.Name }), "Value", "Text");
+
+            //return View(inBound);
+            return View(allianceInbound);
+        }
+
+        // GET: AllianceInbound/Details/5
+        public async Task<ActionResult> Details(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var allianceInbound = customerRepository.GetData(id);
+
+            ViewBag.TicketType = allianceInbound != null ? allianceInbound.FirstOrDefault().TicketID : "NA";
+
+            if (allianceInbound == null)
+            {
+                return HttpNotFound();
+            }
+            return View(allianceInbound.FirstOrDefault());
+        }
+
+        // GET: AllianceInbound/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AllianceInbound allianceInbound = db.AllianceInbounds.Find(id);
+            if (allianceInbound == null)
+            {
+                return HttpNotFound();
+            }
+            return View(allianceInbound);
+        }
+
+        // POST: AllianceInbound/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            AllianceInbound allianceInbound = db.AllianceInbounds.Find(id);
+            db.AllianceInbounds.Remove(allianceInbound);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult DownloadFile(string fileName)
+        {
+            // Specify the folder where your files are stored
+            var folder = Server.MapPath("~/Uploads/");
+            var path = Path.Combine(folder, fileName);
+
+            // Check if file exists
+            if (!System.IO.File.Exists(path))
+            {
+                return HttpNotFound(); // Return a 404 error if the file is not found
+            }
+
+            // Return the file to download
+            return File(path, "application/octet-stream", fileName);
+        }
+
+        public ActionResult GetDesignations(string branchId)
+        {
+
+            var branchName = db.AllianceBranches.Where(b => b.BranchCode == branchId).Select(bn => bn.BranchType).FirstOrDefault();
+            var designations = db.AllianceDesignations
+                                .Where(d => d.Branch == branchName)
+                                .Select(d => new
+                                {
+                                    DesignationID = d.DesignationID,
+                                    Designation = d.Designation
+                                }).ToList().OrderBy(d => d.Designation);
+
+            return Json(designations, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult ExportAllianceInboundCsv()
+        {
+            var data = db.AllianceInbounds
+                         .OrderByDescending(x => x.AllianceInboundId)
+                         .ToList();
+
+            var sb = new StringBuilder();
+            var props = typeof(AllianceInbound).GetProperties();
+
+            // Header
+            sb.AppendLine(string.Join(",", props.Select(p => p.Name)));
+
+            // Rows
+            foreach (var row in data)
+            {
+                sb.AppendLine(string.Join(",", props.Select(p =>
+                    $"\"{(p.GetValue(row)?.ToString() ?? string.Empty).Replace("\"", "\"\"")}\""
+                )));
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+
+            Response.Clear();
+            Response.Buffer = true;
+            Response.ContentType = "application/octet-stream";
+            Response.AddHeader("Content-Disposition", "attachment; filename=AllianceInbound.csv");
+            Response.BinaryWrite(bytes);
+            Response.Flush();
+            Response.SuppressContent = false;
+
+            return new EmptyResult();
+        }
+
+        private string Normalize(string value)
+        {
+            return value?
+                .Replace("\u00A0", " ")
+                .Trim();
+        }
+
+    }
+}

@@ -1,0 +1,50 @@
+﻿@model CallCenter.Models.AllianceDesignation
+
+@{
+    ViewBag.Title = "Delete Alliance Designation";
+}
+
+<h2>Delete Alliance Designation</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Alliance Designation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Branch)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Branch)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.DesignationID)
+        <input type="submit" value="Delete" class="btn btn-default" /> 
+@Html.ActionLink("Back to List", "Index")
+}
+</div>

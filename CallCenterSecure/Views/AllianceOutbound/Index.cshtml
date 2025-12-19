@@ -1,0 +1,319 @@
+﻿@model  CallCenterSecure.Models.AllianceOutbound
+
+@{
+    ViewBag.Title = "Alliance Outbound Call";
+}
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    /*table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }*/
+
+    #testTable th {
+        white-space: nowrap;
+    }
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .tale thead tr th {
+        white-space: nowrap;
+    }
+
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+
+<h2>Alliance Outbound Calls</h2>
+
+@using (Html.BeginForm())
+{
+
+    <div class="row padingtop-bottom20px">
+        <div class="row">
+
+            <div class="col-md-2">
+                Custmer Code
+                @Html.EditorFor(model => model.CustomerCode, new { htmlAttributes = new { @class = "form-control", placeholder = "Customer Code" } })
+                @Html.ValidationMessageFor(model => model.CustomerCode, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                Primary Mobile Number
+                @Html.EditorFor(model => model.PrimaryMobileNumberSearch, new { htmlAttributes = new { @class = "form-control", placeholder = "Primary Mobile Number" } })
+                @Html.ValidationMessageFor(model => model.PrimaryMobileNumberSearch, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2">
+                Call Type
+                @Html.DropDownListFor(model => model.CallType, new SelectList(new List<SelectListItem>
+                                {
+                                    new SelectListItem { Value = "Follow Up Call", Text = "Follow Up Call" },
+                                    new SelectListItem { Value = "Survey Call", Text = "Survey Call" },
+                                    new SelectListItem { Value = "Re-dial Missed Call", Text = "Re-dial Missed Call" }
+                                }, "Value", "Text"), "Select CallType", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                Call Status
+                @Html.DropDownListFor(model => model.CallStatus, new SelectList(new List<SelectListItem>
+                               {
+                                   new SelectListItem { Value = "Inactive", Text = "Inactive" },
+                                   new SelectListItem { Value = "Active", Text = "Active" }
+
+                               }, "Value", "Text"), "Select CallStatus", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                Ticket Id
+                @Html.EditorFor(model => model.TicketID, new { htmlAttributes = new { @class = "form-control", placeholder = "Ticket Id" } })
+                @Html.ValidationMessageFor(model => model.TicketID, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2" style="margin-top: 17px;">
+                <input type="submit" value="Apply" class="btn btn-primary" />
+            </div>
+
+
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <div class="col-md-4" style="float: right;">
+                @*<input type="button" id="btnDownladExcel" class="btn btn-primary" value="Download Excel" onclick="exportToExcel('testTable', 'Excel Export')" style="float:right" />*@
+                <a href="/Allianceoutbound/ExportAllianceOutboundCsv"
+                   target="_blank"
+                   class="btn btn-success">
+                    Download Excel
+                </a>
+                <input type="button" name="btnCreateTicket" class="btn btn-primary" value="Create New" style="float:right;margin-right:10px;" onclick="window.location= '@Url.Action("Create", "AllianceOutbound")'" />
+            </div>
+        </div>
+    </div>
+}
+
+@*@Html.ActionLink("Create New", "Create")*@
+<div class="col-md-12" style="padding-bottom:10px">
+
+    @*@Html.ActionLink("Create New", "Create")*@
+
+</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show auto-close">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show auto-close">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="card shadow-sm mb-3">
+    <div class="card-header bg-primary">
+        <strong class="text-white">
+            Outbound Call Records <i class="bi bi-card-list"></i>
+        </strong>
+    </div>
+    <table id="outboundTable" class="table table-bordered table-striped table-hover dataTable nowrap">
+        <thead class="table-primary text-white">
+            <tr id="tableHeader">
+                <th>Sr No</th>
+                <th>Actions</th>
+                <th>
+                    @Html.DisplayName("Ticket ID")
+                </th>
+                <th>
+                    @Html.DisplayName("Call Status")
+                    
+                </th>
+                <th>
+                    @Html.DisplayName("Call Type")
+                    
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Priority)
+                </th>
+                <th>
+                    @Html.DisplayName("Date Time")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Branch)
+                </th>
+                <th>
+                    @Html.DisplayName("Customer Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Phone Number")
+                </th>
+                <th>
+                    @Html.DisplayName("Product Interest")
+                </th>
+                <th>
+                    @Html.DisplayName("Detail Conversation")
+                </th>
+                <th style="display:none">
+                    @Html.DisplayName("Ticket Type")
+                </th>
+                <th style="display:none">
+                    @Html.DisplayName("Ticket Status")
+                </th>
+                <th>
+                    @Html.DisplayName("Previous TicketID")
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+                foreach (var item in Model.AllianceOutboundList.OrderByDescending(d => d.ModifiedOn))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.AllianceOutboundId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.AllianceOutboundId })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TicketID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CallStatus)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CallType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+
+                        <td>@item.DateTime.ToString("dd-MM-yyyy hh:mm:ss")</td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BranchName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerNameEnglish)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrimaryMobileNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductInterestedName)
+                        </td>
+                        <td title="@item.DetailConversation">
+                            @(item.DetailConversation?.Length > 20
+        ? item.DetailConversation.Substring(0, 20) + "..."
+        : item.DetailConversation)
+                        </td>
+                        <td style="display:none">
+                            
+                        </td>
+                        <td style="display:none">
+                            
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Prev_TicketId)
+                        </td>
+
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@*<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ($('#outboundTable tbody tr').length > 0) {
+            $('#outboundTable').DataTable({
+                pageLength: 10,
+                order: [],
+                responsive: true,
+                fixedHeader: true,
+                columnDefs: [
+                    { responsivePriority: 1, targets: 0 },
+                    { responsivePriority: 2, targets: -1 }
+                ],
+                scrollX: true
+            });
+        } else {
+            console.log("No data found. Table not initialized.");
+        }
+    });
+
+
+
+    function exportToExcel(table, name) {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function (s) {
+                return window.btoa(unescape(encodeURIComponent(s)))
+            }
+            , format = function (s, c) {
+                return s.replace(/{(\w+)}/g, function (m, p) {
+                    return c[p];
+                })
+            }
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+        var a = document.createElement('a');
+        a.href = uri + base64(format(template, ctx))
+        a.download = 'AllianceOutBound.xls';
+        a.download = 'AllianceOutBound.xls';
+        //triggering the function
+        a.click();
+    }
+    setTimeout(function () {
+        $('.auto-close').fadeOut('slow');
+    }, 3000); // 3 seconds
+
+</script>
+

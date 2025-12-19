@@ -1,0 +1,38 @@
+﻿@model CallCenter.Models.State
+
+@{
+    ViewBag.Title = "State Details";
+}
+
+<h2>State Details</h2>
+
+<div>
+    <h4>State</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.StateCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StateCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StateName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Country.CountryName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Country.CountryName)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.StateCode }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

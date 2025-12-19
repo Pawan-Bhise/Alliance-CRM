@@ -1,0 +1,176 @@
+﻿
+@model CallCenterSecure.Models.AllianceOutbound
+
+@{
+    ViewBag.Title = "Alliance Inbound Call Details";
+}
+
+<style>
+    .detail-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .detail-label {
+        width: 180px; /* same width for all labels */
+        font-weight: bold;
+    }
+
+    .detail-value {
+        flex: 1; /* value takes remaining space */
+    }
+</style>
+
+
+<h2>Alliance Outbound Call Details</h2>
+
+<div>
+    <h4>AllianceOutbound</h4>
+    <hr />
+    
+    <div class="container">
+        <input type="hidden" value="@ViewBag.TicketType" id="hdnTicketType" />
+        <div class="row">
+
+            <!-- Column 1 -->
+            <div class="col-md-6">
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.CustomerCode):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.CustomerCode)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.CustomerNameEnglish):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.CustomerNameEnglish)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Branch):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Branch)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.StateRegion):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.StateRegion)</div>
+                </div>
+
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.District):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.District)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.CityTownship):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.CityTownship)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.VillageTractTown):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.VillageTractTown)</div>
+                </div>
+
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.VillageWard):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.VillageWard)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Address):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Address)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.PrimaryMobileNumber):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.PrimaryMobileNumber)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.AlternateMobileNumber):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.AlternateMobileNumber)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.ProductInterested):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.ProductInterested)</div>
+                </div>
+
+            </div>
+
+            <!-- Column 2 -->
+            <div class="col-md-6">
+
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Latitude):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Latitude)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Longitude):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Longitude)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.NRC):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.NRC)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.DateOfBirth):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.DateOfBirth)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Age):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Age)</div>
+                </div>
+
+
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Gender):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Gender)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.MaritalStatus):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.MaritalStatus)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.SpouseName):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.SpouseName)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Priority):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Priority)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.ClientOfficerName):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.ClientOfficerName)</div>
+                </div>
+
+
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.CallStatus):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.CallStatus)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.CallType):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.CallType)</div>
+                </div>
+                
+
+            </div>
+
+            
+        </div>
+
+        <!-- Lead fields -->
+        
+
+        <!-- CMP fields -->
+        
+    </div>
+
+
+    <!-- Lead fields -->
+    
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AllianceOutboundId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+        });
+    </script>
+}

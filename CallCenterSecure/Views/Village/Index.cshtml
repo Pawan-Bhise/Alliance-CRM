@@ -1,0 +1,133 @@
+﻿@model IEnumerable<CallCenter.Models.Village>
+
+@{
+    ViewBag.Title = "Village List";
+}
+
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+<h2>Village List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table  table-bordered table-striped table-hover dataTable nowrap">
+    <thead class="table-primary text-white">
+        <tr class="text-center">
+            <th>
+                @Html.DisplayNameFor(model => model.VillageCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VillageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VillageTract.VillageTractName)
+            </th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>
+                    @Html.DisplayFor(modelItem => item.VillageCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VillageName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VillageTract.VillageTractName)
+                </td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.VillageCode }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.VillageCode }) |
+                    @if (item.IsActive)
+                    {
+                        @Html.ActionLink(
+                            "Deactivate",
+                            "ToggleActive",
+                            "Village",
+                            new { Id = item.VillageCode },
+                            null
+                        )
+                    }
+                    else
+                    {
+                        @Html.ActionLink(
+                            "Activate",
+                            "ToggleActive",
+                            "Village",
+                            new { Id = item.VillageCode },
+                            null
+                        )
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

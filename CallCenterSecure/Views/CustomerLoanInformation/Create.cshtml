@@ -1,0 +1,363 @@
+﻿@model CallCenter.Models.CustomerLoanInformation
+
+@{
+    ViewBag.Title = "Create Customer Loan Information";
+}
+
+<h2>Create Customer Loan Information</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Personal Information</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group  row mb-3">
+            @Html.LabelFor(model => model.CustomerLoanId, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.CustomerLoanId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CustomerLoanId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group  row mb-3">
+            @Html.LabelFor(model => model.CustomerContactNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.CustomerContactNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CustomerContactNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.AccountType, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("AccountType", (SelectList)ViewBag.AccountTypes, "Select Account Type", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AccountType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.StaffID, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.StaffID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StaffID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.GroupMemberNo, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GroupMemberNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GroupMemberNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.GroupCode, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.GroupCode, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.GroupCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_CustomerName, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_Gender, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_Gender", (SelectList)ViewBag.Genders, "Select Gender", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_Salutation, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_Salutation, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_Salutation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_DateOfBirth, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_DateOfBirth, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_DateOfBirth, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_ClientAge, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_ClientAge, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_ClientAge, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_FatherName, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_FatherName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_FatherName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_MotherName, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_MotherName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_MotherName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_MaritalStatus, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_MaritalStatus", (SelectList)ViewBag.MaritalStatuses, "Select Marital Status", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_MaritalStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_SpouseName, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_SpouseName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_SpouseName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_CustomerPhoto, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <input type="file" name="PI_CustomerPhoto" />
+                @Html.ValidationMessageFor(model => model.PI_CustomerPhoto, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_EducationalQualification, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_EducationalQualification", (SelectList)ViewBag.EducationalQualifications, "Select Educational Qualification", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_EducationalQualification, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_NRC, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_NRC, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_NRC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_StateRegion, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_StateRegion", (SelectList)ViewBag.States, "Select State/Region", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_StateRegion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_District, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_District", (SelectList)ViewBag.Districts, "Select District", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_District, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_City, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_City", (SelectList)ViewBag.Cities, "Select City/Township", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_VillageTractTown, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_VillageTractTown", (SelectList)ViewBag.VillageTracts, "Select Village Tract/Town", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_VillageTractTown, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_VillageWard, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_VillageWard", (SelectList)ViewBag.Villages, "Select Village/Ward", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_VillageWard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_Area, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("PI_Area", (SelectList)ViewBag.Areas, "Select Area", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PI_Area, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PI_Address, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PI_Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PI_Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <h4>Business Information</h4>
+        <hr />
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_IsBusinessAddressSameAsHome, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.CheckBoxFor(model => model.BI_IsBusinessAddressSameAsHome)
+                @Html.ValidationMessageFor(model => model.BI_IsBusinessAddressSameAsHome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_StateRegion, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_StateRegion", (SelectList)ViewBag.States, "Select State/Region", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_StateRegion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_District, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_District", (SelectList)ViewBag.Districts, "Select District", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_District, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_City, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_City", (SelectList)ViewBag.Cities, "Select City/Township", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_City, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_VillageTractTown, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_VillageTractTown", (SelectList)ViewBag.VillageTracts, "Select Village Tract/Town", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_VillageTractTown, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_VillageWard, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_VillageWard", (SelectList)ViewBag.Villages, "Select Village/Ward", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_VillageWard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_Area, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("BI_Area", (SelectList)ViewBag.Areas, "Select Area", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BI_Area, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.BI_Address, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.BI_Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.BI_Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.PrimaryMobileNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.PrimaryMobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PrimaryMobileNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.AlternateMobileNumber, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.AlternateMobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AlternateMobileNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.Latitude, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Latitude, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Latitude, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.Longitude, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Longitude, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Longitude, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.Branch, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("Branch", (SelectList)ViewBag.Branches, "Select Branch", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Branch, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.ClientOfficerName, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.ClientOfficerName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ClientOfficerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.ProductInterested, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("ProductInterested", (SelectList)ViewBag.Products, "Select Product Interested", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProductInterested, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            @Html.LabelFor(model => model.CustomerStatus, new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("CustomerStatus", (SelectList)ViewBag.CustomerStatuses, "Select Customer Status", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerStatus, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row mb-3">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

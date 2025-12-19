@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance-CRM</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body style="background-color: #0C3281;">
+    <div>
+        <div class="container">
+
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        @*<hr />*@
+
+    </div>
+    <footer style="background-color: #0C3281">
+        <p>&copy; @DateTime.Now.Year - License</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+﻿@model CallCenter.Models.SubSubCategoryMasterModel
+
+@{
+    ViewBag.Title = "SubSubCategoryMasterAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create Sub Sub Category</h2>
+
+@using (Html.BeginForm("SubSubCategoryMasterAdd","Admin",FormMethod.Post)) 
+{
+    
+    
+<div class="form-horizontal paddingtop30px">
+   
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("Sub Sub Category Name", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SubSubCategoryName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SubSubCategoryName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Sub Category", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.SubCategoryId, new SelectList(Model.SubCategoryList, "SubCategoryId", "SubCategoryName"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.SubCategoryId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-2">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+        <div class="col-md-offset-2 col-md-2">
+            <input type="button" value="Back" class="btn btn-primary" onclick="window.location= '@Url.Action( "SubSubCategoryMaster", "Admin")'" />
+        </div>
+
+    </div>
+    <div>
+        @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+        {
+            if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    <strong>Success!</strong> @ViewBag.Message
+                </div>
+            }
+        }
+    </div>
+
+</div>
+}
+

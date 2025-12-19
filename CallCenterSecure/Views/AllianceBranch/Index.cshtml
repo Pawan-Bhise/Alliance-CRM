@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CallCenter.Models.AllianceBranch>
+
+@{
+    ViewBag.Title = "Alliance Branch List";
+}
+
+<h2>Alliance Branch List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.BranchCode)</th>
+            <th>@Html.DisplayNameFor(model => model.BranchName)</th>
+            <th>@Html.DisplayNameFor(model => model.BranchType)</th>
+            <th>@Html.DisplayNameFor(model => model.ParentBranch)</th>
+            <th>@Html.DisplayNameFor(model => model.BranchEmailID)</th>
+            <th>@Html.DisplayNameFor(model => model.BranchAddress)</th>
+            <th>@Html.DisplayNameFor(model => model.HeadOffice)</th>
+            <th>@Html.DisplayNameFor(model => model.RegionalOffice)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.BranchCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.BranchName)</td>
+                <td>@Html.DisplayFor(modelItem => item.BranchType)</td>
+                <td>@Html.DisplayFor(modelItem => item.ParentBranch)</td>
+                <td>@Html.DisplayFor(modelItem => item.BranchEmailID)</td>
+                <td>@Html.DisplayFor(modelItem => item.BranchAddress)</td>
+                <td>@Html.DisplayFor(modelItem => item.HeadOffice)</td>
+                <td>@Html.DisplayFor(modelItem => item.RegionalOffice)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.BranchCode }) @*|
+        @Html.ActionLink("Details", "Details", new { id = item.BranchCode }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.BranchCode })*@ |
+                    @if (item.IsActive)
+                    {
+                        @Html.ActionLink(
+                            "Deactivate",
+                            "ToggleActive",
+                            "AllianceBranch",
+                            new { Id = item.BranchCode },
+                            null
+                        )
+                    }
+                    else
+                    {
+                        @Html.ActionLink(
+                            "Activate",
+                            "ToggleActive",
+                            "AllianceBranch",
+                            new { Id = item.BranchCode },
+                            null
+                        )
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

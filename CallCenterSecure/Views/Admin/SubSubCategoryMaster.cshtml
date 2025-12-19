@@ -1,0 +1,39 @@
+﻿@model CallCenter.Models.SubSubCategoryMasterModel
+
+@{
+    ViewBag.Title = "SubSubCategoryMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Sub Sub Category</h2>
+
+<p class="addbutton">
+    @Html.ActionLink("Add New SubSubCategory", "SubSubCategoryMasterAdd")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Sub Sub Category")
+        </th>
+        <th>
+            @Html.DisplayName("Sub Category")
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.SubSubCategoryList.OrderBy(or=>or.SubCategoryName))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubSubCategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubCategoryName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "SubSubCategoryMasterEdit", new { id = item.SubSubCategoryId }) |
+                @Html.ActionLink("Delete", "SubSubCategoryMasterDelete", new { id = item.SubSubCategoryId })
+            </td>
+        </tr>
+
+    }
+</table>

@@ -1,0 +1,248 @@
+﻿@model CallCenter.Models.MIMULocation
+
+@{
+    ViewBag.Title = "Create MIMU Location";
+}
+
+<h2>Create MIMU Location</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>MIMU Location</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CountryCode, "Country", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CountryCode", (SelectList)ViewBag.Countries, "Select Country", new { @class = "form-control", @id = "CountryCode" })
+                @Html.ValidationMessageFor(model => model.CountryCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.CountryName, new { @id = "CountryName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StateCode, "State", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("StateCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select State", new { @class = "form-control", @id = "StateCode" })
+                @Html.ValidationMessageFor(model => model.StateCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.StateName, new { @id = "StateName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DistrictCode, "District", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("DistrictCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select District", new { @class = "form-control", @id = "DistrictCode" })
+                @Html.ValidationMessageFor(model => model.DistrictCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.DistrictName, new { @id = "DistrictName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CityCode, "City", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CityCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select City", new { @class = "form-control", @id = "CityCode" })
+                @Html.ValidationMessageFor(model => model.CityCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.CityName, new { @id = "CityName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VillageTractCode, "Village Tract", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("VillageTractCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Village Tract", new { @class = "form-control", @id = "VillageTractCode" })
+                @Html.ValidationMessageFor(model => model.VillageTractCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.VillageTractName, new { @id = "VillageTractName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VillageCode, "Village", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("VillageCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Village", new { @class = "form-control", @id = "VillageCode" })
+                @Html.ValidationMessageFor(model => model.VillageCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.VillageName, new { @id = "VillageName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AreaCode, "Area", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("AreaCode", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Select Area", new { @class = "form-control", @id = "AreaCode" })
+                @Html.ValidationMessageFor(model => model.AreaCode, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.AreaName, new { @id = "AreaName" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Fetch states based on country selection
+            $('#CountryCode').change(function () {
+                var countryCode = $(this).val();
+                if (countryCode) {
+                    $.getJSON('@Url.Action("GetStates")', { countryCode: countryCode }, function (data) {
+                        $('#StateCode').empty();
+                        $('#StateCode').append($('<option></option>').val('').html('Select State'));
+                        $.each(data, function (i, state) {
+                            $('#StateCode').append($('<option></option>').val(state.StateCode).html(state.StateName));
+                        });
+                        $('#CountryName').val($('#CountryCode option:selected').text());
+                    });
+                } else {
+                    $('#StateCode').empty();
+                    $('#StateCode').append($('<option></option>').val('').html('Select State'));
+                }
+                $('#StateName').val('');
+                $('#DistrictCode').empty().append($('<option></option>').val('').html('Select District'));
+                $('#DistrictName').val('');
+                $('#CityCode').empty().append($('<option></option>').val('').html('Select City'));
+                $('#CityName').val('');
+                $('#VillageTractCode').empty().append($('<option></option>').val('').html('Select Village Tract'));
+                $('#VillageTractName').val('');
+                $('#VillageCode').empty().append($('<option></option>').val('').html('Select Village'));
+                $('#VillageName').val('');
+                $('#AreaCode').empty().append($('<option></option>').val('').html('Select Area'));
+                $('#AreaName').val('');
+            });
+
+            // Fetch districts based on state selection
+            $('#StateCode').change(function () {
+                var stateCode = $(this).val();
+                if (stateCode) {
+                    $.getJSON('@Url.Action("GetDistricts")', { stateCode: stateCode }, function (data) {
+                        $('#DistrictCode').empty();
+                        $('#DistrictCode').append($('<option></option>').val('').html('Select District'));
+                        $.each(data, function (i, district) {
+                            $('#DistrictCode').append($('<option></option>').val(district.DistrictCode).html(district.DistrictName));
+                        });
+                        $('#StateName').val($('#StateCode option:selected').text());
+                    });
+                } else {
+                    $('#DistrictCode').empty();
+                    $('#DistrictCode').append($('<option></option>').val('').html('Select District'));
+                }
+                $('#DistrictName').val('');
+                $('#CityCode').empty().append($('<option></option>').val('').html('Select City'));
+                $('#CityName').val('');
+                $('#VillageTractCode').empty().append($('<option></option>').val('').html('Select Village Tract'));
+                $('#VillageTractName').val('');
+                $('#VillageCode').empty().append($('<option></option>').val('').html('Select Village'));
+                $('#VillageName').val('');
+                $('#AreaCode').empty().append($('<option></option>').val('').html('Select Area'));
+                $('#AreaName').val('');
+            });
+
+            // Fetch cities based on district selection
+            $('#DistrictCode').change(function () {
+                var districtCode = $(this).val();
+                if (districtCode) {
+                    $.getJSON('@Url.Action("GetCities")', { districtCode: districtCode }, function (data) {
+                        $('#CityCode').empty();
+                        $('#CityCode').append($('<option></option>').val('').html('Select City'));
+                        $.each(data, function (i, city) {
+                            $('#CityCode').append($('<option></option>').val(city.CityCode).html(city.CityName));
+                        });
+                        $('#DistrictName').val($('#DistrictCode option:selected').text());
+                    });
+                } else {
+                    $('#CityCode').empty();
+                    $('#CityCode').append($('<option></option>').val('').html('Select City'));
+                }
+                $('#CityName').val('');
+                $('#VillageTractCode').empty().append($('<option></option>').val('').html('Select Village Tract'));
+                $('#VillageTractName').val('');
+                $('#VillageCode').empty().append($('<option></option>').val('').html('Select Village'));
+                $('#VillageName').val('');
+                $('#AreaCode').empty().append($('<option></option>').val('').html('Select Area'));
+                $('#AreaName').val('');
+            });
+
+            // Fetch village tracts based on city selection
+            $('#CityCode').change(function () {
+                var cityCode = $(this).val();
+                if (cityCode) {
+                    $.getJSON('@Url.Action("GetVillageTracts")', { cityCode: cityCode }, function (data) {
+                        $('#VillageTractCode').empty();
+                        $('#VillageTractCode').append($('<option></option>').val('').html('Select Village Tract'));
+                        $.each(data, function (i, villageTract) {
+                            $('#VillageTractCode').append($('<option></option>').val(villageTract.VillageTractCode).html(villageTract.VillageTractName));
+                        });
+                        $('#CityName').val($('#CityCode option:selected').text());
+                    });
+                } else {
+                    $('#VillageTractCode').empty();
+                    $('#VillageTractCode').append($('<option></option>').val('').html('Select Village Tract'));
+                }
+                $('#VillageTractName').val('');
+                $('#VillageCode').empty().append($('<option></option>').val('').html('Select Village'));
+                $('#VillageName').val('');
+                $('#AreaCode').empty().append($('<option></option>').val('').html('Select Area'));
+                $('#AreaName').val('');
+            });
+
+            // Fetch villages based on village tract selection
+            $('#VillageTractCode').change(function () {
+                var villageTractCode = $(this).val();
+                if (villageTractCode) {
+                    $.getJSON('@Url.Action("GetVillages")', { villageTractCode: villageTractCode }, function (data) {
+                        $('#VillageCode').empty();
+                        $('#VillageCode').append($('<option></option>').val('').html('Select Village'));
+                        $.each(data, function (i, village) {
+                            $('#VillageCode').append($('<option></option>').val(village.VillageCode).html(village.VillageName));
+                        });
+                        $('#VillageTractName').val($('#VillageTractCode option:selected').text());
+                    });
+                } else {
+                    $('#VillageCode').empty();
+                    $('#VillageCode').append($('<option></option>').val('').html('Select Village'));
+                }
+                $('#VillageName').val('');
+                $('#AreaCode').empty().append($('<option></option>').val('').html('Select Area'));
+                $('#AreaName').val('');
+            });
+
+            // Fetch areas based on village selection
+            $('#VillageCode').change(function () {
+                var villageCode = $(this).val();
+                if (villageCode) {
+                    $.getJSON('@Url.Action("GetAreas")', { villageCode: villageCode }, function (data) {
+                        $('#AreaCode').empty();
+                        $('#AreaCode').append($('<option></option>').val('').html('Select Area'));
+                        $.each(data, function (i, area) {
+                            $('#AreaCode').append($('<option></option>').val(area.AreaCode).html(area.AreaName));
+                        });
+                        $('#VillageName').val($('#VillageCode option:selected').text());
+                    });
+                } else {
+                    $('#AreaCode').empty();
+                    $('#AreaCode').append($('<option></option>').val('').html('Select Area'));
+                }
+                $('#AreaName').val('');
+            });
+
+            // Update area name on selection
+            $('#AreaCode').change(function () {
+                $('#AreaName').val($('#AreaCode option:selected').text());
+            });
+        });
+    </script>
+}

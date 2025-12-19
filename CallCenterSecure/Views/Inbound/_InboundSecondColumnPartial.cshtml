@@ -1,0 +1,81 @@
+﻿@model CallCenterSecure.Models.InboundCall
+
+<div class="form-group">
+    @Html.LabelFor(m => m.CallObjective, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.CallObjective, new SelectList(ViewBag.CallObjectives, "Value", "Text"), "Select Objective", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.CallObjective, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Region, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.Region, new SelectList(ViewBag.Regions, "Value", "Text"), "Select Region", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Region, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Branch, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.Branch, new SelectList(ViewBag.Branches, "Value", "Text"), "Select Branch", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Branch, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Origin, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.Origin, new SelectList(ViewBag.Origins, "Value", "Text"), "Select Origin", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Origin, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Product, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.Product, new SelectList(ViewBag.Products, "Value", "Text"), "Select Product", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Product, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.DetailConversation, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.TextAreaFor(m => m.DetailConversation, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.DetailConversation, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Response, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.TextAreaFor(m => m.Response, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Response, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.TicketType, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.TicketType, new SelectList(ViewBag.TicketTypes, "Value", "Text"), "Select Ticket Type", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.TicketType, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.FollowUpCallBackSchedule, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.TextBoxFor(m => m.FollowUpCallBackSchedule, new { @class = "form-control", @type = "date" })
+        @Html.ValidationMessageFor(m => m.FollowUpCallBackSchedule, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Action, htmlAttributes: new { @class = "control-label col-md-4" })
+    <div class="col-md-8">
+        @Html.EditorFor(m => m.Action, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(m => m.Action, "", new { @class = "text-danger" })
+    </div>
+</div>

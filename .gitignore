@@ -1,0 +1,21 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+
+# NuGet
+packages/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Web config secrets
+appsettings.Development.json

@@ -1,0 +1,155 @@
+﻿@model CallCenter.Models.LoginViewModel
+
+@{ ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml"; }
+
+
+@*<h2>Login</h2>*@
+
+<style>
+    /* body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #0C3281;
+    }*/
+
+    .login_side_image {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+        margin: 0;
+        background-color: #0C3281;
+        background-image: url('../../Content/images/Alliance-crm.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 60%;
+        float: left;
+    }
+
+    .login-container {
+        background-color: #FEFFFF;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        width: 320px;
+        text-align: center;
+        float: left;
+        margin-top: 3%
+    }
+
+        .login-container img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-container input[type=submit] {
+            width: 100%;
+            padding: 10px;
+            background-color: #0C3382;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-container .forgot-password {
+            display: block;
+            margin-top: 10px;
+            color: #0C3382;
+            text-decoration: none;
+        }
+
+            .login-container .forgot-password:hover {
+                text-decoration: underline;
+            }
+
+        .login-container .remember-password {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+            min-height: 50px;
+            font-size: 12px;
+        }
+</style>
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+{
+
+<div class="login_side_image">
+</div>
+<div class="login-container">
+    <img src="~/Content/images/Alliance-name-logo.png" alt="Alliance Logo" style="margin-bottom: 70px;">
+
+    @Html.EditorFor(model => model.UserName, "User ID", new { htmlAttributes = new { @class = "form-control maxWidth280px", placeholder = "User ID" } })
+    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+
+    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control maxWidth280px", placeholder = "Password", @type = "password" } })
+    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    <input class="btn btn-primary" type="submit" value="LOGIN" />
+    <div class="remember-password">
+        <input type="checkbox" id="remember" style="float:left;margin-top: 1px;">
+        <label for="remember" style="float: left; padding-left: 3px; font-weight: normal; color: #0C3382">Remember password</label>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+    </div>
+    <p style="min-height: 50px; color: #0C3382; font-size: 18px; ">"Your Satisfaction, Our Promise."</p>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</div>
+                               
+                                                <!--<div class="form-horizontal">
+
+
+                                                    <div class="form-group">
+                                                        @Html.Label("", "User ID", new { @class = "control-label col-md-2" })
+
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.UserName, "User ID", new { htmlAttributes = new { @class = "form-control maxWidth280px", placeholder = "User ID" } })
+                                                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                                                        <div class="col-md-10">
+                                                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control maxWidth280px", placeholder = "Password", @type = "password" } })
+                                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                                        </div>
+                                                    </div>--> @*<div class="form-group">
+                                                        @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label col-md-2" })<div class="col-md-10">
+                                                            <div class="checkbox">
+                                                                @Html.EditorFor(model => model.RememberMe)
+                                                                @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                                    <!--<div class="form-group">
+                                                                            <div class="col-md-offset-2 col-md-10">
+                                                                                <input class="btn btn-primary" type="submit" value="Log In" />
+                                                                            </div>
+                                                                        </div>
+                                                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                                    </div>-->}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

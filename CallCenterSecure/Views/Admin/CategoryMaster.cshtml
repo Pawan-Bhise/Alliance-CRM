@@ -1,0 +1,33 @@
+﻿@model  CallCenter.Models.CategoryMasterModel
+
+@{
+    ViewBag.Title = "CategoryMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Category Master</h2>
+
+<p class="addbutton">
+    @Html.ActionLink("Add New Category", "CategoryMasterAdd","Admin")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Category Name")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.CategoryList  ) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "CategoryMasterEdit", new { id = item.CategoryId }) |
+            @Html.ActionLink("Delete", "CategoryMasterDelete", new { id = item.CategoryId })
+        </td>
+    </tr>
+}
+
+</table>

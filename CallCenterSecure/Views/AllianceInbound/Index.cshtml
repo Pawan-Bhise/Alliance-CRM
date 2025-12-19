@@ -1,0 +1,269 @@
+﻿@model CallCenter.Models.ViewModels.AllianceInboundIndexVM
+@*<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>*@
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+
+<h2 class="text-primary m-4">Alliance Inbound Calls</h2>
+
+@using (Html.BeginForm("Index", "AllianceInbound", FormMethod.Get))
+{
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-primary text-white fw-bold py-2">
+            <i class="bi bi-search"></i> Search & Actions
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    @Html.Label("From Date")
+                    @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control datepicker", placeholder = "From Date", autocomplete = "off" })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("To Date")
+                    @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control datepicker", placeholder = "To Date", autocomplete = "off" })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Phone Number")
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Phone Number", oninput = "this.value = this.value.replace(/[^0-9]/g,'');", maxlength = "15", })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Ticket Type")
+                    @Html.DropDownListFor(m => m.TicketTypeId, (SelectList)ViewBag.TicketTypes, "Select Ticket Type", new { @class = "form-control" })
+                </div>
+
+                <div class="col-md-2">
+                    @Html.Label("Ticket Status")
+                    @Html.DropDownListFor(m => m.TicketStatusId, (SelectList)ViewBag.TicketStatuses, "Select Ticket Status", new { @class = "form-control" })
+                </div>
+                <div class="col-md-2">
+                    @Html.Label("Ticket Id")
+                    @Html.TextBoxFor(m => m.TicketId, new { @class = "form-control", placeholder = "Ticket Id" })
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap p-2 mt-3">
+                <div class="text-danger">
+                    <p class="my-2">
+                        <strong>Note:</strong> Please apply filters before downloading the records!
+                    </p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <div>
+                        <a href="@Url.Action("Create", "AllianceInbound")" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Create New
+                        </a>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">
+                            Apply Filters <i class="bi bi-funnel-fill"></i>
+                        </button>
+                    </div>
+
+                    <div>
+                        <a href="@Url.Action("Index", "AllianceInbound")" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Clear Filters
+                        </a>
+                    </div>
+
+                    <div>
+                        @*<button id="btnDownloadExcel" class="btn btn-primary" onclick="@Url.Action("ExportAllianceInboundCsv")">
+            Download Excel <i class="bi bi-file-earmark-spreadsheet"></i>
+        </button>*@
+                        @*<button id="btnDownloadExcel"
+                class="btn btn-primary"
+                onclick="window.location.href='@Url.Action("ExportAllianceInboundCsv", "AllianceInbound")'">
+            Download Excel <i class="bi bi-file-earmark-spreadsheet"></i>
+        </button>*@
+                        <a href="/AllianceInbound/ExportAllianceInboundCsv"
+                           target="_blank"
+                           class="btn btn-success">
+                            Download Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show auto-close">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show auto-close">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="card shadow-sm mb-3">
+    <div class="card-header bg-primary">
+        <strong class="text-white">
+            Inbound Call Records <i class="bi bi-card-list"></i>
+        </strong>
+    </div>
+
+
+    <table id="inboundTable" class="table table-bordered table-striped table-hover dataTable nowrap">
+        <thead class="table-primary text-white">
+            <tr class="text-center">
+                <th>Sr No</th>
+                <th>
+                    Actions
+                </th>
+                <th>Ticket ID</th>
+                <th>Ticket Type</th>
+                <th>Ticket Status</th>
+                <th>Date Time</th>
+                <th>Call Objective</th>
+                <th>Branch</th>
+                <th>Client Name</th>
+                <th>Phone Number</th>
+                <th>Product Name</th>
+                <th>Response</th>
+                <th>FollowUp Call Back Schedule</th>
+                <th>Prev Ticket Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+                foreach (var item in Model.InboundList)
+                {
+                    <tr class="text-center">
+                        <td>@i</td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.AllianceInboundId }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.AllianceInboundId })
+                        </td>
+                        <td>@item.TicketID</td>
+                        <td>@item.TicketType</td>
+                        <td>@item.TicketStatus</td>
+                        <td>@item.DateTime.ToString("dd-MM-yyyy hh:mm:ss")</td>
+                        <td>@item.CallObjective</td>
+                        <td>@item.Branch</td>
+                        <td>@item.ClientName</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.Product</td>
+                        <td>@item.Response</td>
+                        <td>@(item.FollowUpCallBackSchedule.HasValue ? item.FollowUpCallBackSchedule.Value.ToString("dd-MM-yyyy") : "")</td>
+                        <td>
+                            @item.Prev_TicketId
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script>
+        $(document).ready(function () {
+            if ($('#inboundTable tbody tr').length > 0) {
+                $('#inboundTable').DataTable({
+                    pageLength: 10,
+                    order: [],
+                    responsive: true,
+                    fixedHeader: true,
+                    columnDefs: [
+                        { responsivePriority: 1, targets: 0 },
+                        { responsivePriority: 2, targets: -1 }
+                    ],
+                    scrollX: true
+                });
+            } else {
+                console.log("No data found. Table not initialized.");
+            }
+        });
+
+        //function exportToExcel(tableId, filename) {
+        //    var table = document.getElementById(tableId);
+        //    var wb = XLSX.utils.table_to_book(table, { sheet: "Inbound Calls" });
+        //    XLSX.writeFile(wb, filename + ".xlsx");
+        //}
+
+
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true
+            });
+        });
+
+        setTimeout(function () {
+            $('.auto-close').fadeOut('slow');
+        }, 3000); // 3 seconds
+    </script>
+
+}

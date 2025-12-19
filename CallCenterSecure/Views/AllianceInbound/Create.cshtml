@@ -1,0 +1,783 @@
+﻿@model CallCenter.Models.AllianceInbound
+
+@{
+    ViewBag.Title = "Inbound Call Register";
+}
+
+<h2>Inbound Call Register</h2>
+
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+<link rel="stylesheet" href="jquery-ui-timepicker-addon.css" />
+@*<link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/all.min.css" rel="stylesheet" />*@
+@using (Html.BeginForm("Create", "AllianceInbound", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal row">
+        <div class="col-md-6">
+            @Html.HiddenFor(model => model.AgentName)
+            @Html.HiddenFor(model => model.AgentId)
+            @Html.HiddenFor(model => model.CallStartDateTime)
+            @Html.HiddenFor(model => model.CallEndDateTime)
+            @Html.HiddenFor(model => model.Duration)
+
+
+            <!-- DateTime -->
+            <div class="row mb-3">
+                <label class="col-md-4 fw-bold">
+                    @Html.DisplayNameFor(m => m.DateTime) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.DateTime, "{0:yyyy/MM/dd}", new { @class = "form-control datepicker", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.DateTime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <!-- Call Objective -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.CallObjective) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.CallObjective, (SelectList)ViewBag.CallObjectives,
+                        "Select Objective", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CallObjective, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Region -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Region) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.Region, (SelectList)ViewBag.CascadeRegion,
+                        "Select Region", new { @class = "form-control", id = "Region" })
+                    @Html.ValidationMessageFor(m => m.Region, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Branch -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Branch) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.Branch, (SelectList)ViewBag.Branches,
+                        "Select Branch", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Branch, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Client Name -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.ClientName) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.ClientName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.ClientName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.PhoneNumber) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", oninput = "this.value = this.value.replace(/[^0-9]/g,'');", maxlength = "15" })
+                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <!-- Address -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Address)
+                </label>
+                <div class="col-md-8">
+                    @Html.TextAreaFor(m => m.Address, new { @class = "form-control", rows = 3 })
+                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Origin -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Origin) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.Origin, (SelectList)ViewBag.Origins,
+                        "Select Origin", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Origin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <!-- Product -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Product)
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.Product, (SelectList)ViewBag.Products,
+                        "Select Product", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Detail Conversation -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.DetailConversation) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.TextAreaFor(m => m.DetailConversation, new { @class = "form-control", rows = 3 })
+                    @Html.ValidationMessageFor(m => m.DetailConversation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <!-- Response -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.Response) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.TextAreaFor(m => m.Response, new { @class = "form-control", rows = 3 })
+                    @Html.ValidationMessageFor(m => m.Response, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Ticket Type -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.TicketType)
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.TicketType, (SelectList)ViewBag.TicketTypes,
+                        "Select Ticket Type", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.TicketType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <!-- FollowUp Call Back Schedule -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.FollowUpCallBackSchedule)
+                </label>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(m => m.FollowUpCallBackSchedule, "{0:yyyy/MM/dd}",
+                        new { @class = "form-control datepicker", autocomplete = "off" })
+                    @Html.ValidationMessageFor(m => m.FollowUpCallBackSchedule, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <!-- Ticket Status -->
+            <div class="form-group row mb-3">
+                <label class="col-md-4 col-form-label">
+                    @Html.DisplayNameFor(m => m.TicketStatus) <span class="text-danger">*</span>
+                </label>
+                <div class="col-md-8">
+                    @Html.DropDownListFor(m => m.TicketStatus, (SelectList)ViewBag.TicketStatuses,
+                        "Select Ticket Status", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.TicketStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- Right column for Lead_ and Cmp_ fields -->
+        <div class="col-md-6">
+            <!-- NA fields -->
+            <div id="NaFields" style="display: none;">
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Na_Disposition, htmlAttributes: new { @class = "control-label col-md-4" })
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Na_Disposition, (SelectList)ViewBag.NaDispositions, "Select Disposition", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Na_Disposition, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lead fields -->
+            <div id="leadFields" style="display: none;">
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_CustomerName, htmlAttributes: new { @class = "control-label col-md-4" })
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_CustomerName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Branch)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(
+                            model => model.Lead_Branch,
+                            (SelectList)ViewBag.Branches,
+                            "Select Branch",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Lead_Branch, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_StateRegion)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_StateRegion, (SelectList)ViewBag.Regions, "Select State/Region", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_StateRegion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_District)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_District, (SelectList)ViewBag.Districts, "Select District", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_District, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_CityTownship)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_CityTownship, (SelectList)ViewBag.Cities, "Select City/Township", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_CityTownship, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_VillageTractTown)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_VillageTractTown, (SelectList)ViewBag.VillageTracts, "Select Village Tract/Town", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_VillageTractTown, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_VillageWard)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_VillageWard, (SelectList)ViewBag.Villages, "Select Village/Ward", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_VillageWard, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Address)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.Lead_Address, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_PrimaryMobileNumber)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_PrimaryMobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_PrimaryMobileNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_AlternateMobileNumber)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_AlternateMobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_AlternateMobileNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_ProductInterested)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_ProductInterested, (SelectList)ViewBag.Products, "Select Product Interested", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Lead_ProductInterested, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Latitude)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_Latitude, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_Latitude, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Longitude)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_Longitude, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_Longitude, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_NRC)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_NRC, new { htmlAttributes = new { @class = "form-control", type = "number", min = "1" } })
+                        @Html.ValidationMessageFor(model => model.Lead_NRC, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_DateOfBirth)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Lead_DateOfBirth, "{0:yyyy/MM/dd}", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.Lead_DateOfBirth, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Age)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_Age, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_Age, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Gender)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_Gender,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Male", Text = "Male" },
+                                new SelectListItem { Value = "Female", Text = "Female" }
+                            }, "Value", "Text"),
+                            "Select Gender",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Lead_Gender, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_MaritalStatus)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_MaritalStatus,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Married", Text = "Married" },
+                                new SelectListItem { Value = "Unmarried", Text = "Unmarried" }
+                            }, "Value", "Text"),
+                            "Select Marital Status",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Lead_MaritalStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_SpouseName)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_SpouseName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_SpouseName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_Priority)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_Priority,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Blank", Text = "Blank" },
+                                new SelectListItem { Value = "Hot", Text = "Hot" },
+                                new SelectListItem { Value = "Warm", Text = "Warm" },
+                                new SelectListItem { Value = "Cold", Text = "Cold" }
+                            }, "Value", "Text"),
+                            "Select Priority",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Lead_Priority, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_ClientOfficerName)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Lead_ClientOfficerName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Lead_ClientOfficerName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Lead_LeadStatus)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Lead_LeadStatus,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Inactive", Text = "Inactive" },
+                                new SelectListItem { Value = "Active", Text = "Active" },
+                                new SelectListItem { Value = "Closed (without action)", Text = "Closed (without action)" },
+                                new SelectListItem { Value = "Closed (COB)", Text = "Closed (COB)" }
+                            }, "Value", "Text"),
+                            "Select Lead Status",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Lead_LeadStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cmp_ fields -->
+            <div id="cmpFields" style="display: none;">
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_Disposition)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_Disposition, (SelectList)ViewBag.CmpDispositions, "Select Disposition", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_Disposition, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_CustomerCode)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Cmp_CustomerCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cmp_CustomerCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_CustomerName)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Cmp_CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cmp_CustomerName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_PhoneNumber)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Cmp_PhoneNumber, new { htmlAttributes = new { @class = "form-control", oninput = "this.value = this.value.replace(/[^0-9]/g,'');", maxlength = "15" } })
+                        @Html.ValidationMessageFor(model => model.Cmp_PhoneNumber, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_Region)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_Region, (SelectList)ViewBag.CascadeRegion, "Select Region", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_Region, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_Branch)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_Branch, (SelectList)ViewBag.Branches, "Select Branch", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_Branch, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_ComplainToDesignation)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_ComplainToDesignation, (SelectList)ViewBag.Designations, "Select Designation", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainToDesignation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_ComplainTo)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_ComplainTo, (SelectList)ViewBag.ComplainTo, "Select ComplainTo", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainTo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_ComplainCC)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_ComplainCC, (SelectList)ViewBag.ComplainTo, "Select ComplainCC", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainCC, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_NatureOfComplaint)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_NatureOfComplaint,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Type1", Text = "Type1" },
+                                new SelectListItem { Value = "Type2", Text = "Type2" }
+                            }, "Value", "Text"),
+                            "Select Nature of Complaint",
+                            new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_NatureOfComplaint, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.ComplainResolve)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.ComplainResolve, new { htmlAttributes = new { @class = "form-control"} })
+                        @Html.ValidationMessageFor(model => model.ComplainResolve, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_CaseDetail)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(model => model.Cmp_CaseDetail, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_CaseDetail, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_ComplainStatus)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_ComplainStatus,
+                            new SelectList(new List<SelectListItem>
+                            {
+                                new SelectListItem { Value = "Register", Text = "Register" },
+                                new SelectListItem { Value = "Resolve", Text = "Resolve" },
+                                new SelectListItem { Value = "Cancel", Text = "Cancel" },
+                                new SelectListItem { Value = "Repl", Text = "Repl" }
+                            }, "Value", "Text"),
+                            "Select Complain Status",
+                            new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainStatus, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">Evidence Attachment</label>
+                    <div class="col-md-8">
+                        <input type="file" name="File" id="File" class="form-control" />
+                        @Html.ValidationMessageFor(model => model.File)
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-6">
+                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+            </div>
+
+            <div class="col-md-6 text-right">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </div>
+}
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")    
+    <script src="jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#Region").on("change", function () {
+                //var region = $(this).val();
+                var region = $("#Region option:selected").text();
+                $.ajax({
+                    url: '@Url.Action("GetBranches", "AllianceInbound")',
+                    type: 'GET',
+                    data: { region: region },
+                    success: function (data) {
+
+                        var branchDropdown = $("#Branch");
+                        branchDropdown.empty();
+
+                        // Default option
+                        branchDropdown.append(
+                            $('<option>').val('').text('Select Branch')
+                        );
+
+                        // Populate returned branches
+                        $.each(data, function (i, branch) {
+                            branchDropdown.append(
+                                $('<option>')
+                                    .val(branch.Text)
+                                    .text(branch.Text)
+                            );
+                        });
+                    },
+                    error: function () {
+                        console.error("Error loading branches.");
+                    }
+                });
+            });
+
+            var ticketType = $('#TicketType option:selected').text();
+            showHideFields(ticketType);
+
+            $('#TicketType').change(function () {
+                var ticketType = $('#TicketType option:selected').text();
+                showHideFields(ticketType);
+            });
+
+            $("#CallObjective").change(function () {
+                var callObjType = $('#CallObjective option:selected').text();
+
+                if (callObjType == "Enquiry") {
+
+                    $("#TicketType option[value='3']").prop("disabled", true); // Technica
+
+
+                } else if (callObjType == "Complaint") {
+
+                    $("#TicketType option[value='2']").prop("disabled", true); // Technical
+
+
+                }
+            });
+
+            function showHideFields(ticketType) {
+                if (ticketType === 'Lead Ticket') {
+                    $('#leadFields').show();
+                    $('#cmpFields').hide();
+                    $('#NaFields').hide();
+                } else if (ticketType === 'Complain Ticket') {
+                    $('#leadFields').hide();
+                    $('#NaFields').hide();
+                    $('#cmpFields').show();
+                } else if (ticketType === 'NA') {
+                    $('#leadFields').hide();
+                    $('#cmpFields').hide();
+                    $('#NaFields').show();
+                } else {
+                    $('#leadFields').hide();
+                    $('#cmpFields').hide();
+                    $('#NaFields').hide();
+                }
+            }
+
+            @*$('#Cmp_Branch').change(function () {
+                var branchId = $(this).val();
+                $.ajax({
+                    url: '@Url.Action("GetDesignations", "AllianceInbound")',
+                    type: 'GET',
+                    data: { branchId: branchId },
+                    success: function (data) {
+                        var options = '<option value="">Select ComplainTo</option>';
+                        for (var i = 0; i < data.length; i++) {
+                            options += '<option value="' + data[i].DesignationID + '">' + data[i].Designation + '</option>';
+                        }
+                        $('#Cmp_ComplainToDesignation').html(options);
+                    },
+                    error: function () {
+                        alert('Error loading designation.');
+                    }
+                });
+            });*@
+        });
+
+        $("form").submit(function () {
+            $(".datepicker").each(function () {
+                if (this.value && this.value.length === 10) {
+                    const now = new Date();
+                    this.value += " " +
+                        now.toTimeString().split(" ")[0];
+                }
+            });
+        });
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                timeFormat: "HH:mm:ss",
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true
+            });
+
+            $("#Lead_DateOfBirth").datepicker({
+                dateFormat: 'yy-mm-dd',
+                maxDate: new Date(2015, 11, 31), // Month is 0-based
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true
+            });
+        });
+    </script>
+
+}

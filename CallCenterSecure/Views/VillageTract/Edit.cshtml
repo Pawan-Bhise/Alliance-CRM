@@ -1,0 +1,50 @@
+﻿@model CallCenter.Models.VillageTract
+
+@{
+    ViewBag.Title = "Edit Village Tract";
+}
+
+<h2>Edit Village Tract</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Village Tract</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.VillageTractCode)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VillageTractName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VillageTractName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VillageTractName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CityCode, "City", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CityCode", null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CityCode, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

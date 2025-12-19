@@ -1,0 +1,177 @@
+﻿@model CallCenter.Models.RegistrationViewModel
+
+@{
+    ViewBag.Title = "UserList";
+}
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<h2>User Management</h2>
+
+<p>
+    <div class="row padingtop-bottom20px">
+        <div class="col-md-12">
+            @*<input type="submit" value="Apply" class="btn btn-primary" />
+                <input type="button" id="btnDownladExcel" class="btn btn-primary" value="Download Excel" style="float:right" />*@
+            <input type="button" name="btnCreateTicket" class="btn btn-primary" value="Register User" style="float:right" onclick="window.location= '@Url.Action("Registration", "Admin")'" />
+        </div>
+    </div>
+</p>
+<table class="table table-bordered table-striped table-hover dataTable nowrap">
+    <thead class="table-primary text-white">
+        <tr class="text-center">
+            <th>
+                @Html.DisplayName("User Name")
+            </th>
+            <th>
+                @Html.DisplayName("First Name")
+            </th>
+            <th>
+                @Html.DisplayName("Last Name")
+            </th>
+            <th>
+                @Html.DisplayName("Email")
+            </th>
+            <th>
+                @Html.DisplayName("Role")
+            </th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    
+
+    @foreach (var item in Model.UsersList)
+    {
+        <tr class="text-center">
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @if (item.IsActive)
+                {
+                    <span class="badge bg-success">Active</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactive</span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "UserEdit", new { id = item.UserId }) |
+                @Html.ActionLink("Reset Password", "ResetPassword", "Home", new { id = item.UserId }, new { @class = "userresetpassword" })|
+                @if (item.IsActive)
+                {
+                    @Html.ActionLink("Deactive", "ToggleActive", "Admin", new { id = item.UserId }, null)                    
+                }
+                else
+                {
+                    @Html.ActionLink("Activate", "ToggleActive", "Admin", new { id = item.UserId }, null)                    
+                }
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+
+
+
+<script type="text/javascript">
+
+    function showDelete(userid) {
+        if (confirm("Are you sure you want to delete this?")) {
+
+            $.ajax(
+                {
+                    url: '/Admin/UserDelete?id=' + userid,
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        location.reload();
+                        alert("User deleted successfully!!");
+
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+        }
+        else {
+            return false;
+        }
+    }
+
+</script>
+
+
+
+
+

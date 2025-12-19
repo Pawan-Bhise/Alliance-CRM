@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/c3.min.css" rel="stylesheet" />
+
+<div class="home-container text-center">
+
+    <img src="~/Content/images/Alliance-logo.png"
+         class="img-fluid mt-4 mb-4 d-block mx-auto"
+         style="max-width: 420px;" />
+
+    @* Dashboard Widgets & Charts (Temporarily Disabled – Do Not Remove) *@
+    @*<table class="table">
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Today" id="btnTodaySR">Today</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Yesterday" id="btnYesterdaySR">Yesterday</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Last Month" id="btnLastMonthSR">Last Month</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="All" id="btnAllSR">All</button>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayName("Total SR")
+                </th>
+                <th>
+                    @Html.DisplayName("Open SR")
+                </th>
+                <th>
+                    @Html.DisplayName("InProgress SR")
+                </th>
+                <th>
+                    @Html.DisplayName("Closed SR")
+                </th>
+            </tr>
+            <tr>
+                <td class="align-center">
+                    <span id="totalSR"></span>
+                </td>
+                <td class="align-center">
+                    <span id="openSR"></span>
+                </td>
+                <td class="align-center">
+                    <span id="inprogressSR"></span>
+                </td>
+                <td class="align-center">
+                    <span id="closedSR"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div id="pieChart"></div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Today" id="btnTodayTicket">Today</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Yesterday" id="btnYesterdayTicket">Yesterday</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="Last Month" id="btnLastMonthTicket">Last Month</button>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" value="All" id="btnAllTicket">All</button>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayName("Total Ticket")
+                </th>
+                <th>
+                    @Html.DisplayName("Open Ticket")
+                </th>
+                <th>
+                    @Html.DisplayName("InProgress Ticket")
+                </th>
+                <th>
+                    @Html.DisplayName("Closed Ticket")
+                </th>
+            </tr>
+            <tr>
+                <td class="align-center">
+                    <span id="totalTicket"></span>
+                </td>
+                <td class="align-center">
+                    <span id="openTicket"></span>
+                </td>
+                <td class="align-center">
+                    <span id="inprogressTicket"></span>
+                </td>
+                <td class="align-center">
+                    <span id="closedTicket"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <div id="pieChartTicket"></div>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayName("Top 3 Ticket Categories")
+                </th>
+                <th>
+                    @Html.DisplayName("Top 3 SR Categories")
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <span id="top1ticketcategory"></span>
+                </td>
+                <td>
+                    <span id="top1srcategory"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span id="top2ticketcategory"></span>
+                </td>
+                <td>
+                    <span id="top2srcategory"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span id="top3ticketcategory"></span>
+                </td>
+                <td>
+                    <span id="top3srcategory"></span>
+                </td>
+            </tr>
+        </table>*@
+</div>
+
+<style>
+    .home-container {
+        min-height: 60vh; /* Ensures space so footer never overlaps */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Keep original table design when uncommented later */
+    .table {
+        width: 49% !important;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        float: left;
+        margin-left: 5px;
+    }
+
+    td {
+        border: 1px solid #ddd;
+        font-weight: bold;
+    }
+
+    th {
+        border: 1px solid #ddd;
+        text-align: center;
+        background: #0056b3;
+        color: #fff;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        color: #fff;
+    }
+
+    .btn-selected {
+        color: #fff;
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+</style>

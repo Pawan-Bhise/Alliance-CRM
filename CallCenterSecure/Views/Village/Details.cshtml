@@ -1,0 +1,38 @@
+﻿@model CallCenter.Models.Village
+
+@{
+    ViewBag.Title = "Village Details";
+}
+
+<h2>Village Details</h2>
+
+<div>
+    <h4>Village</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.VillageCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VillageCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VillageName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VillageName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VillageTract.VillageTractName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VillageTract.VillageTractName)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.VillageCode }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

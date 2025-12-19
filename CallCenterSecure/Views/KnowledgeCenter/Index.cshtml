@@ -1,0 +1,139 @@
+﻿@model CallCenter.Models.KnowledgeCenterModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<h2>Create Knowledge Center</h2>
+
+
+
+@using (Html.BeginForm("Index", "KnowledgeCenter", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+     
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="col-md-12"> @Html.Label("Category", htmlAttributes: new { @class = "control-label" }) </div>
+                <div class="col-md-12"> @Html.DropDownListFor(model => model.CategoryId, new SelectList(Model.CategoryList, "CategoryId", "CategoryName"), new { @class = "form-control" }) </div>
+                <div class="col-md-12"> @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" }) </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12"> @Html.Label("Sub Category", htmlAttributes: new { @class = "control-label" }) </div>
+                <div class="col-md-12"> @Html.DropDownListFor(model => model.SubCategoryId, new SelectList(Model.SubCategoryList, "SubCategoryId", "SubCategoryName"), new { @class = "form-control" }) </div>
+                <div class="col-md-12"> @Html.ValidationMessageFor(model => model.SubCategoryId, "", new { @class = "text-danger" }) </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="col-md-12"> @Html.Label("Sub Sub Category", htmlAttributes: new { @class = "control-label" }) </div>
+                <div class="col-md-12"> @Html.DropDownListFor(model => model.SubSubCategoryId, new SelectList(Model.SubSubCategoryList, "SubSubCategoryId", "SubSubCategoryName"), new { @class = "form-control" }) </div>
+                <div class="col-md-12"> @Html.ValidationMessageFor(model => model.SubSubCategoryId, "", new { @class = "text-danger" }) </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12"> @Html.Label("File", htmlAttributes: new { @class = "control-label" }) </div>
+                <div class="col-md-12"> @Html.TextBoxFor(model => model.File, new { @class = "form-control", type = "file" }) </div>
+                <div class="col-md-12"> @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" }) </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <div class="col-md-12"> @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" }) </div>
+                <div class="col-md-12"> @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @rows = "4" }) </div>
+                <div class="col-md-12"> @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" }) </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-12">
+                <div class="savecancelbutton">
+                    <input type="submit" value="Create" class="btn btn-primary marginright100px" />
+                    <input type="button" value="Back" class="btn btn-primary" onclick="window.location= '@Url.Action( "KnowledgeList", "KnowledgeCenter")'" />
+                </div>
+            </div>
+        </div>
+        <div>
+            @if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+            {
+                if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> @ViewBag.Message
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $("#CategoryId").on("change", function () {
+            fillSubCategoryDropdown();
+        });
+        $("#SubCategoryId").on("change", function () {
+            fillSubSubCategoryDropdown();
+        });
+        function fillSubCategoryDropdown() {
+            $.ajax(
+                {
+                    url: '/Home/GetSubCategoryByCategory?CategoryId=' + $("#CategoryId").val(),
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        var subcat = $.parseJSON(data);
+                        $("#SubCategoryId").html("");
+                        for (var i = 0; i < subcat.length; i++) {
+                            $("#SubCategoryId").append("<option value='" + subcat[i].SubCategoryId + "'>" + subcat[i].SubCategoryName + "</option>");
+                        }
+                        fillSubSubCategoryDropdown();
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                })
+        }
+
+        function fillSubSubCategoryDropdown() {
+            $.ajax(
+                {
+                    url: '/Home/GetSubSubCategoryBySubCategory?SubCategoryId=' + $("#SubCategoryId").val(),
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        var subcat = $.parseJSON(data);
+                        $("#SubSubCategoryId").html("");
+                        for (var i = 0; i < subcat.length; i++) {
+                            $("#SubSubCategoryId").append("<option value='" + subcat[i].SubSubCategoryId + "'>" + subcat[i].SubSubCategoryName + "</option>");
+                        }
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+        }
+
+        $(document).on("change", "#TypeOfCaller", function () {
+
+            $("#CustomerSegment").html("");
+            if ($("#TypeOfCaller:checked").val() == "Agent") {
+                $("#CustomerSegment").append("<option value='Primer'>Primer</option>");
+                $("#CustomerSegment").append("<option value='Elite'>Elite</option>");
+            }
+            else {
+                $("#CustomerSegment").append("<option value='Normal'>Normal</option>");
+                $("#CustomerSegment").append("<option value='Ruby'>Ruby</option>");
+            }
+        });
+
+    });
+</script>
+

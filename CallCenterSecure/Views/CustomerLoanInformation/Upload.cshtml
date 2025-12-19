@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Upload Customer Loan Information";
+}
+
+<h2>Upload Customer Loan Information</h2>
+
+@using (Html.BeginForm("Upload", "CustomerLoanInformation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Upload File", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Upload" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}

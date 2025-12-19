@@ -1,0 +1,36 @@
+﻿@model IEnumerable<CallCenter.Models.AllianceProduct>
+
+@{
+    ViewBag.Title = "Alliance Product List";
+}
+
+<h2>Alliance Product List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.ProductCode)</th>
+            <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+            <th>@Html.DisplayNameFor(model => model.ProductGroup)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ProductCode)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                <td>@Html.DisplayFor(modelItem => item.ProductGroup)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductCode }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProductCode }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductCode })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

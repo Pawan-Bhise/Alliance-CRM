@@ -1,0 +1,169 @@
+﻿/*@import url('Site.css');*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Layout fix for preventing footer overlap */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+}
+
+/*.body-content {
+    flex: 1;
+}*/
+
+/* Footer aligned naturally (not fixed) */
+footer {
+    width: 100%;
+}
+
+/* Keep long text visible in description lists */
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 35px;
+}
+
+/* Input focus styling */
+.form-control:focus {
+    box-shadow: none;
+}
+
+/* Radio & checkbox outline removed */
+input[type="radio"],
+input[type="checkbox"],
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+    outline: none;
+    outline-offset: 0;
+}
+
+/* Shared max width class */
+.maxWidth280px {
+    max-width: 280px;
+}
+
+/* Theme / Brand primary color */
+.bgcolor {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+}
+
+/* Navbar text */
+.navbar-inverse .navbar-nav > li > a,
+.navbar-inverse .navbar-brand {
+    color: #fff;
+    font-weight: bold;
+}
+.navbar-brand > img {
+    height:1rem;
+}
+    /* Primary button theme */
+    .btn-primary {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #003f7f;
+            border-color: #003f7f;
+        }
+
+        .btn-primary:active,
+        .btn-primary:focus,
+        .btn-primary.active,
+        .open > .dropdown-toggle.btn-primary {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+            .btn-primary:active:hover,
+            .btn-primary.active:hover,
+            .open > .dropdown-toggle.btn-primary:hover,
+            .btn-primary:active:focus,
+            .btn-primary.active:focus,
+            .open > .dropdown-toggle.btn-primary:focus {
+                color: #fff;
+                background-color: #003f7f;
+                border-color: #003f7f;
+            }
+    /* Navbar active dropdown background */
+    .navbar-inverse .navbar-nav > .open > a,
+    .navbar-inverse .navbar-nav > .open > a:hover,
+    .navbar-inverse .navbar-nav > .open > a:focus {
+        color: #fff;
+        background-color: #0056b3;
+    }
+    /* Spacing utility classes */
+    .errorMsgPadding {
+        padding-left: 0;
+        padding-top: 5px;
+    }
+
+    .paddingBottom10px {
+        padding-bottom: 10px;
+    }
+
+    .paddingtop30px {
+        padding-top: 30px;
+    }
+
+    .savecancelbutton {
+        float: right;
+        margin-top: 30px;
+    }
+
+    .marginright100px {
+        margin-right: 100px;
+    }
+    /* Radio button text alignment */
+    .redioButton {
+        width: 50px;
+        float: left;
+        height: 25px;
+    }
+
+    .redioButtonText {
+        float: left;
+        width: 126px;
+        line-height: 29px;
+    }
+    /* Logged-in user text */
+    .loggedinuser {
+        float: right;
+        width: 264px;
+        line-height: 49px;
+        color: #fff;
+        font-weight: bold;
+        padding-right: 20px;
+        text-align: right;
+    }
+    /* Add button styling */
+    .addbutton {
+        float: right;
+        padding-bottom: 25px;
+    }
+
+        .addbutton a {
+            color: #0056b3;
+        }
+    /* Access denied message container */
+    .accessdeniedmsg {
+        margin-top: 50px;
+        border: 1px solid;
+        padding: 10px;
+    }
+    /* Padding utility */
+    .padingtop-bottom20px {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }

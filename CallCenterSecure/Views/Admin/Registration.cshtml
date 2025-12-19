@@ -1,0 +1,104 @@
+﻿@model CallCenter.Models.RegistrationViewModel
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<h2>Registration</h2>
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">
+            <strong>Success!</strong> @ViewBag.Message
+        </div>
+    }
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row">
+        <div class="col-md-12">
+            <div class="col-md-12"> @Html.Label("User ID", htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12"> @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control",@placeholder="Please enter user id" } }) </div>
+            <div class="col-md-12"> @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-6">
+            <div class="col-md-12"> @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12"> @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control",@placeholder="Please enter first name" } }) </div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12"> @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12"> @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control",@placeholder="Please enter last name" } })</div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-6">
+            <div class="col-md-12">  @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12">   @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password",@placeholder="Please enter password"} }) </div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12">  @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12">  @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", @type = "password",@placeholder="Please enter confirm password" } }) </div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger errorMsgPadding" })</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-6">
+            <div class="col-md-12">  @Html.Label("Role", htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12">  @Html.DropDownListFor(model => model.RoleId, new SelectList(Model.RoleList, "RoleId", "RoleName"), "Select Role", new { @class = "form-control" })</div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12">  @Html.Label("Email", htmlAttributes: new { @class = "control-label" }) </div>
+            <div class="col-md-12"> @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control",@placeholder="Please enter email" } }) </div>
+            <div class="col-md-12">  @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger errorMsgPadding" }) </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-12">
+            <div class="savecancelbutton">
+                <input type="submit" value="Create" class="btn btn-primary marginright100px" />
+                <input type="button" value="Cancel" class="btn btn-primary" onclick="window.location= '@Url.Action( "UserList", "Admin")'" />
+
+            </div>
+        </div>
+    </div>
+</div>
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-danger">
+                <strong>Error!</strong> @ViewBag.Message
+            </div>
+        }
+    }
+}
+
+<div class="form-horizontal">
+    <div class="row" style="font-size: 12px;color: red;">
+        <div class="col-md-12" style="font-size:13px;font-weight:bold"># Password Policy </div>
+        <div class="col-md-12">
+            <ul class="list-group" style="list-style-type:none !important">
+                <li># Minimun password length should be 8 character </li>
+                <li># Maximun password length should be 15 character</li>
+                <li># Only Alphabets and Numbers allowed</li>
+                <li># Minimum Password age 30 days</li>
+            </ul>
+        </div>
+    </div>
+</div>
+ 

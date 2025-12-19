@@ -1,0 +1,186 @@
+﻿@model IEnumerable<CallCenterSecure.Models.CustomerLoan.CustomerLoan>
+
+@{
+    ViewBag.Title = "Customer Loan Information List";
+}
+
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
+
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+<h2>Customer Loan Information List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<!-- Upload Form -->
+<h3>Upload Customer Loan Information</h3>
+@using (Html.BeginForm("Upload", "CustomerLoanInformation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-primary text-white fw-bold py-2">
+            <i class="bi bi-search"></i> File Upload
+        </div>
+
+        <div class="card-body">
+
+            <div class="form-group">
+                <label for="file">Choose file to upload</label>
+                <input type="file" name="file" id="file" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </div>
+
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show auto-close">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show auto-close">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<div class="card shadow-sm mb-3">
+    <div class="card-header bg-primary">
+        <strong class="text-white">
+            File Upload <i class="bi bi-card-list"></i>
+        </strong>
+    </div>
+
+    <table id="CustomerLoan" class="table table-bordered table-striped table-hover dataTable nowrap">
+        <thead class="table-primary text-white">
+            <tr class="text-center">
+                <th>@Html.DisplayNameFor(model => model.COName)</th>
+                <th>@Html.DisplayNameFor(model => model.ProductName)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerCode)</th>
+                <th>@Html.DisplayNameFor(model => model.BranchName)</th>
+                <th>@Html.DisplayNameFor(model => model.DateOfActOpening)</th>
+                <th>@Html.DisplayNameFor(model => model.CustomerName)</th>
+                <th>@Html.DisplayNameFor(model => model.NRC)</th>
+                <th>@Html.DisplayNameFor(model => model.MobileNo1)</th>
+                <th>@Html.DisplayNameFor(model => model.DisbursedAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.Installments)</th>
+                <th>@Html.DisplayNameFor(model => model.InstallmentAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.PaymentFrequency)</th>
+                <th>@Html.DisplayNameFor(model => model.PrincipleOutstanding)</th>
+                <th>@Html.DisplayNameFor(model => model.InterestReceivable)</th>
+                <th>@Html.DisplayNameFor(model => model.AccountStatus)</th>
+                <th style="display:none"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.COName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CustomerCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BranchName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DateOfActOpening)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.NRC)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MobileNo1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DisbursedAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Installments)</td>
+                        <td>@Html.DisplayFor(modelItem => item.InstallmentAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PaymentFrequency)</td>
+
+                        <td>@Html.DisplayFor(modelItem => item.PrincipleOutstanding)</td>
+                        <td>@Html.DisplayFor(modelItem => item.InterestReceivable)</td>
+                        <td>@Html.DisplayFor(modelItem => item.AccountStatus)</td>
+                        <td style="display:none">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) @*|
+                                @Html.ActionLink("Delete", "Delete", new { id = item.CustomerLoanId })*@
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($('#CustomerLoan tbody tr').length > 0) {
+            $('#CustomerLoan').DataTable({
+                pageLength: 10,
+                order: [],
+                responsive: true,
+                fixedHeader: true,
+                columnDefs: [
+                    { responsivePriority: 1, targets: 0 },
+                    { responsivePriority: 2, targets: -1 }
+                ],
+                scrollX: true
+            });
+        } else {
+            console.log("No data found. Table not initialized.");
+        }
+    });
+</script>
