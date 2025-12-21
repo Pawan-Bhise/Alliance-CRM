@@ -541,7 +541,7 @@
                         @Html.LabelFor(model => model.Cmp_ComplainToDesignation)
                     </label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(model => model.Cmp_ComplainToDesignation, (SelectList)ViewBag.Designations, "Select Designation", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.Cmp_ComplainToDesignation, (SelectList)ViewBag.ComplainTo, "Select ComplainTo", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_ComplainToDesignation, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -551,21 +551,38 @@
                         @Html.LabelFor(model => model.Cmp_ComplainTo)
                     </label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(model => model.Cmp_ComplainTo, (SelectList)ViewBag.ComplainTo, "Select ComplainTo", new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.Cmp_ComplainTo, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_ComplainTo, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group row mb-3">
                     <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_ComplainCCDesignation)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_ComplainCCDesignation, (SelectList)ViewBag.ComplainTo, "Select ComplainCC", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainCCDesignation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
                         @Html.LabelFor(model => model.Cmp_ComplainCC)
                     </label>
                     <div class="col-md-8">
-                        @Html.DropDownListFor(model => model.Cmp_ComplainCC, (SelectList)ViewBag.ComplainTo, "Select ComplainCC", new { @class = "form-control" })
+                        @Html.TextBoxFor(model => model.Cmp_ComplainCC, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_ComplainCC, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_Designation)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_Designation, (SelectList)ViewBag.Designations, "Select Designation", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_Designation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
                 <div class="form-group row mb-3">
                     <label class="col-md-4 col-form-label">
                         @Html.LabelFor(model => model.Cmp_NatureOfComplaint)
@@ -587,7 +604,7 @@
                         @Html.LabelFor(model => model.ComplainResolve)
                     </label>
                     <div class="col-md-8">
-                        @Html.EditorFor(model => model.ComplainResolve, new { htmlAttributes = new { @class = "form-control"} })
+                        @Html.EditorFor(model => model.ComplainResolve, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ComplainResolve, "", new { @class = "text-danger" })
                     </div>
                 </div>

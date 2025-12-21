@@ -171,6 +171,8 @@ namespace CallCenter.Models
         public string Cmp_Origin { get; set; }
         [Display(Name = "Cmp Complain To Designation")]
         public string Cmp_ComplainToDesignation { get; set; }
+        [Display(Name = "Cmp Complain CC Designation")]
+        public string Cmp_ComplainCCDesignation { get; set; }
         [Display(Name = "Cmp Complain To")]
         public string Cmp_ComplainTo { get; set; }
         [Display(Name = "Cmp Complain CC")]
@@ -181,7 +183,8 @@ namespace CallCenter.Models
         public string Cmp_CaseDetail { get; set; }
         [Display(Name = "Cmp Complain Status")]
         public string Cmp_ComplainStatus { get; set; }
-
+        [Display(Name = "Cmp Designation")]
+        public string Cmp_Designation { get; set; }
         // NA Fields
         public string Na_Disposition { get; set; }
 
