@@ -3,8 +3,9 @@
 @{
     ViewBag.Title = "Edit";
 }
-<link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
-<link href="~/Content/all.min.css" rel="stylesheet" />
+@*<link href="~/Content/bootstrap-datepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/all.min.css" rel="stylesheet" />*@
+<link href="~/Content/jquery-ui.css" rel="stylesheet" />
 <style>
     .save-btn {
         background-color: #005cc8; /* Blue color */
@@ -162,15 +163,6 @@
                 <div class="col-md-8">
                     <div class="row mb-2">
                         <div class="col-md-4">
-                            <label>Citizen</label>
-                            @Html.DropDownList(
-                                "CitizenDropdown",
-                                (SelectList)ViewBag.CitizenList,
-                                "Select Citizen",
-                                new { @class = "form-control" }
-                            )
-                        </div>
-                        <div class="col-md-4">
                             <label>State Division</label>
                             @Html.DropDownList(
                                 "StateDivisionDropdown",
@@ -184,6 +176,15 @@
                             <select id="TownshipDropdown" class="form-control">
                                 <option value="">Select Township</option>
                             </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Citizen</label>
+                            @Html.DropDownList(
+                                "CitizenDropdown",
+                                (SelectList)ViewBag.CitizenList,
+                                "Select Citizen",
+                                new { @class = "form-control" }
+                            )
                         </div>
                         <div class="col-md-4">
                             <label>Ref. Number</label>
@@ -207,8 +208,9 @@
             <div class="form-group row mb-2">
                 @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
                     @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Age)
                 </div>
             </div>
 
@@ -373,6 +375,12 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            $('#DateOfBirth').on('changeDate change', function () {
+
+                var dob = $('#DateOfBirth').datepicker('getDate');
+                calculateAge(dob);
+            });
+
             $("#CitizenDropdown").change(updateNRC);
             $("#StateDivisionDropdown").change(updateNRC);
             $("#TownshipDropdown").change(updateNRC);
@@ -427,17 +435,19 @@
             });
         });
 
-            $('#DateOfBirth').datepicker({
-                format: 'yyyy/mm/dd',
-                setDate: new Date(),
-                endDate: '+0d',
-                autoclose: true
-            });
+            //$('#DateOfBirth').datepicker({
+            //    format: 'yyyy/mm/dd',
+            //    setDate: new Date(),
+            //    endDate: '+0d',
+            //    autoclose: true
+            //});
 
     });
         function updateNRC() {
 
-            var divisionCode = $("#StateDivisionDropdown").val();   // 1
+            var selectedText = $("#StateDivisionDropdown option:selected").text();
+            var divisionCode = selectedText.split('-')[0].trim();
+
             var townshipCode = $("#TownshipDropdown").val();        // MaKaNa
             var citizenCode = $("#CitizenDropdown").val();          // N
             var refNumber = $("#NRCRefNumber").val();               // 123456
@@ -456,5 +466,37 @@
 
 
         }
+
+        function calculateAge(dob) {
+            if (!dob) {
+                $('#Age').val('');
+                $('input[name="Age"]').val('');
+                return;
+            }
+
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            $('#Age').val(age);
+            $('input[name="Age"]').val(age);
+
+            $('input[name="Age"]').val(age); // hidden field
+        }
+
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-120:+0",   // from 120 years ago to current year
+                maxDate: 0,             // prevent future dates
+                autoclose: true         // harmless (ignored by jQuery UI)
+            });
+        });
     </script>
 }

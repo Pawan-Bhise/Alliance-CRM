@@ -14,7 +14,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {
-        //base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<User>().HasKey(u => u.UserId);
         modelBuilder.Entity<TicketManagement>().HasKey(t => t.TicketId);
         modelBuilder.Entity<SRManagement>().HasKey(s => s.SRId);
@@ -73,6 +73,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Township> Township { get; set; }
     public DbSet<Designations> Designations { get; set; }
     public DbSet<CustomerLoan> CustomerLoan { get; set; }
-    
+    public DbSet<ComplaintDesignation> ComplaintDesignations { get; set; }
+    public DbSet<NatureOfComplaints> NatureOfComplaint { get; set; }
+
 
 }

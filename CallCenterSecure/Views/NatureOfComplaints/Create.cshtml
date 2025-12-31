@@ -1,0 +1,51 @@
+﻿@model CallCenter.Models.NatureOfComplaints
+
+@{
+    ViewBag.Title = "Create Nature of Compalaints";
+}
+
+<h2>Create Nature of Compalaints</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row">
+        @Html.LabelFor(
+            model => model.ComplaintsDescrption,
+            new { @class = "control-label col-md-2" }
+        )
+
+        <div class="col-md-4">
+            @Html.TextBoxFor(
+                model => model.ComplaintsDescrption,
+                new { @class = "form-control" }
+            )
+            @Html.ValidationMessageFor(
+                model => model.ComplaintsDescrption,
+                "",
+                new { @class = "text-danger" }
+            )
+        </div>
+
+        <div class="col-md-2" style="padding-top:25px">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
+
+
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

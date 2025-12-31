@@ -136,12 +136,12 @@
         </div>
 
         @*<div class="form-group row mb-3">
-            @Html.LabelFor(model => model.PI_CustomerPhoto, new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
-                <input type="file" name="PI_CustomerPhoto" />
-                @Html.ValidationMessageFor(model => model.PI_CustomerPhoto, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                @Html.LabelFor(model => model.PI_CustomerPhoto, new { @class = "control-label col-md-2" })
+                <div class="col-md-4">
+                    <input type="file" name="PI_CustomerPhoto" />
+                    @Html.ValidationMessageFor(model => model.PI_CustomerPhoto, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
         <div class="form-group row mb-3">
             @Html.LabelFor(model => model.PI_EducationalQualification, new { @class = "control-label col-md-2" })
@@ -360,4 +360,18 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script type="text/javascript">
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                timeFormat: "HH:mm:ss",
+                changeMonth: true,
+                changeYear: true,
+                autoclose: true
+            });
+    </script>
+
 }
+

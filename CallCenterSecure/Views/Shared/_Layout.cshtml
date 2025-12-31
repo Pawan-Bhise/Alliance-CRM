@@ -127,8 +127,8 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     @*<li>@Html.ActionLink("Category", "CategoryMaster", "Admin")</li>
-                                        <li>@Html.ActionLink("Sub Category", "SubCategoryMaster", "Admin")</li>
-                                        <li>@Html.ActionLink("Sub Sub Category", "SubSubCategoryMaster", "Admin")</li>*@
+            <li>@Html.ActionLink("Sub Category", "SubCategoryMaster", "Admin")</li>
+            <li>@Html.ActionLink("Sub Sub Category", "SubSubCategoryMaster", "Admin")</li>*@
                                     @*<li>@Html.ActionLink("Registration", "Registration", "Admin")</li>*@
 
                                     <li>@Html.ActionLink("User Management", "UserList", "Admin", null, new { @class = "dropdown-item" })</li>
@@ -146,6 +146,8 @@
                                     <li>@Html.ActionLink("AllianceBranch", "Index", "AllianceBranch", null, new { @class = "dropdown-item" })</li>
                                     <li>@Html.ActionLink("AllianceDesignation", "Index", "AllianceDesignation", null, new { @class = "dropdown-item" })</li>
                                     <li>@Html.ActionLink("Origins", "Index", "Origins", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Complaint Designation", "Index", "ComplaintDesignation", null, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Nature of Complaint", "Index", "NatureOfComplaints", null, new { @class = "dropdown-item" })</li>
                                 }
                                 <li>@Html.ActionLink("Reset Password", "ResetPassword", "Home", null, new { @class = "dropdown-item" })</li>
                             </ul>

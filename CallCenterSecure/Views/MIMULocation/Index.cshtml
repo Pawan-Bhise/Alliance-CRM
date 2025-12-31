@@ -64,80 +64,105 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table table-bordered table-striped table-hover dataTable nowrap">
-    <thead class="table-primary text-white">
-        <tr class="text-center">
-            <th>@Html.DisplayNameFor(model => model.CountryCode)</th>
-            <th>@Html.DisplayNameFor(model => model.CountryName)</th>
-            <th>@Html.DisplayNameFor(model => model.StateCode)</th>
-            <th>@Html.DisplayNameFor(model => model.StateName)</th>
-            <th>@Html.DisplayNameFor(model => model.DistrictCode)</th>
-            <th>@Html.DisplayNameFor(model => model.DistrictName)</th>
-            <th>@Html.DisplayNameFor(model => model.CityCode)</th>
-            <th>@Html.DisplayNameFor(model => model.CityName)</th>
-            <th>@Html.DisplayNameFor(model => model.VillageTractCode)</th>
-            <th>@Html.DisplayNameFor(model => model.VillageTractName)</th>
-            <th>@Html.DisplayNameFor(model => model.VillageCode)</th>
-            <th>@Html.DisplayNameFor(model => model.VillageName)</th>
-            <th>@Html.DisplayNameFor(model => model.AreaCode)</th>
-            <th>@Html.DisplayNameFor(model => model.AreaName)</th>
-            <th>Active</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table id="DataTable" class="table table-bordered table-striped table-hover dataTable nowrap">
+        <thead class="table-primary text-white">
             <tr class="text-center">
-                <td>@Html.DisplayFor(modelItem => item.CountryCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.CountryName)</td>
-                <td>@Html.DisplayFor(modelItem => item.StateCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.StateName)</td>
-                <td>@Html.DisplayFor(modelItem => item.DistrictCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.DistrictName)</td>
-                <td>@Html.DisplayFor(modelItem => item.CityCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.CityName)</td>
-                <td>@Html.DisplayFor(modelItem => item.VillageTractCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.VillageTractName)</td>
-                <td>@Html.DisplayFor(modelItem => item.VillageCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.VillageName)</td>
-                <td>@Html.DisplayFor(modelItem => item.AreaCode)</td>
-                <td>@Html.DisplayFor(modelItem => item.AreaName)</td>
-                <td>
-                    @if (item.IsActive)
-                    {
-                        <span class="badge bg-success">Active</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Inactive</span>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @if (item.IsActive)
-                    {
-                        @Html.ActionLink(
-                            "Deactivate",
-                            "ToggleActive",
-                            "MIMULocation",
-                            new { Id = item.Id },
-                            null
-                        )
-                    }
-                    else
-                    {
-                        @Html.ActionLink(
-                            "Activate",
-                            "ToggleActive",
-                            "MIMULocation",
-                            new { Id = item.Id },
-                            null
-                        )
-                    }
-                </td>
+                <th>@Html.DisplayNameFor(model => model.CountryCode)</th>
+                <th>@Html.DisplayNameFor(model => model.CountryName)</th>
+                <th>@Html.DisplayNameFor(model => model.StateCode)</th>
+                <th>@Html.DisplayNameFor(model => model.StateName)</th>
+                <th>@Html.DisplayNameFor(model => model.DistrictCode)</th>
+                <th>@Html.DisplayNameFor(model => model.DistrictName)</th>
+                <th>@Html.DisplayNameFor(model => model.CityCode)</th>
+                <th>@Html.DisplayNameFor(model => model.CityName)</th>
+                <th>@Html.DisplayNameFor(model => model.VillageTractCode)</th>
+                <th>@Html.DisplayNameFor(model => model.VillageTractName)</th>
+                <th>@Html.DisplayNameFor(model => model.VillageCode)</th>
+                <th>@Html.DisplayNameFor(model => model.VillageName)</th>
+                <th>@Html.DisplayNameFor(model => model.AreaCode)</th>
+                <th>@Html.DisplayNameFor(model => model.AreaName)</th>
+                <th>Active</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>@Html.DisplayFor(modelItem => item.CountryCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CountryName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StateCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.StateName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DistrictCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DistrictName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CityCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CityName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.VillageTractCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.VillageTractName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.VillageCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.VillageName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AreaCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AreaName)</td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        @if (item.IsActive)
+                        {
+                            @Html.ActionLink(
+                                "Deactivate",
+                                "ToggleActive",
+                                "MIMULocation",
+                                new { Id = item.Id },
+                                null
+                            )
+                        }
+                        else
+                        {
+                            @Html.ActionLink(
+                                "Activate",
+                                "ToggleActive",
+                                "MIMULocation",
+                                new { Id = item.Id },
+                                null
+                            )
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            if ($('#DataTable tbody tr').length > 0) {
+                $('#DataTable').DataTable({
+                    pageLength: 10,
+                    ordering: true,
+                    responsive: true,
+                    fixedHeader: true,
+                    autoWidth: false,
+
+                    dom:
+                        "<'row mb-2'<'col-md-6'l><'col-md-6 text-end'f>>" +
+                        "<'row'<'col-12'tr>>" +
+                        "<'row mt-2'<'col-md-5'i><'col-md-7 text-end'p>>",
+
+                    columnDefs: [
+                        { orderable: false, targets: -1 } // Actions column
+                    ]
+                });
+            }
+        });
+    </script>

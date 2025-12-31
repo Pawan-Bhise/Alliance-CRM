@@ -152,6 +152,20 @@
 
         <!-- Right column for Lead_ and Cmp_ fields -->
         <div class="col-md-6">
+            <!-- NA fields -->
+            <div id="NaFields" style="display: none;">
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Na_Disposition, htmlAttributes: new { @class = "control-label col-md-4" })
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Na_Disposition, (SelectList)ViewBag.NaDispositions, "Select Disposition", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Na_Disposition, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+
             <!-- Lead fields -->
             <div id="leadFields" style="display: none;">
                 <div class="form-group row mb-3">
@@ -261,8 +275,40 @@
                 <div class="form-group row mb-3">
                     <label class="col-md-4 col-form-label">@Html.LabelFor(model => model.Lead_NRC)</label>
                     <div class="col-md-8">
-                        @Html.EditorFor(model => model.Lead_NRC, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Lead_NRC, "", new { @class = "text-danger" })
+                        <div class="row mb-2">
+                            <div class="col-md-4">
+                                <label>State Division</label>
+                                @Html.DropDownList(
+                                    "StateDivisionDropdown",
+                                    (SelectList)ViewBag.StateDivisionList,
+                                    "Select Division",
+                                    new { @class = "form-control" }
+                                )
+                            </div>
+                            <div class="col-md-4">
+                                <label>Township</label>
+                                <select id="TownshipDropdown" class="form-control">
+                                    <option value="">Select Township</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Citizen</label>
+                                @Html.DropDownList(
+                                    "CitizenDropdown",
+                                    (SelectList)ViewBag.CitizenList,
+                                    "Select Citizen",
+                                    new { @class = "form-control" }
+                                )
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Ref. Number</label>
+                                <input id="NRCRefNumber" type="text" />
+                            </div>
+                        </div>
+
+                        @Html.EditorFor(model => model.NRC, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NRC, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
@@ -277,8 +323,9 @@
                 <div class="form-group row mb-3">
                     <label class="col-md-4 col-form-label">@Html.LabelFor(model => model.Lead_Age)</label>
                     <div class="col-md-8">
-                        @Html.EditorFor(model => model.Lead_Age, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Lead_Age, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
                         @Html.ValidationMessageFor(model => model.Lead_Age, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.Lead_Age)
                     </div>
                 </div>
 
@@ -606,76 +653,55 @@
                 <div class="form-group row  mb-2">
                     @Html.LabelFor(model => model.Cmp_ComplainToDesignation, htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @*@Html.DropDownListFor(model => model.Cmp_ComplainToDesignation,
-        new SelectList(new List<SelectListItem>
-        {
-            new SelectListItem { Value = "Designation", Text = "Designation" },
-            new SelectListItem { Value = "Email-Address", Text = "Email-Address" }
-        }, "Value", "Text"),
-        "Select Complain To Designation",
-        new { @class = "form-control" })*@
-                        @Html.DropDownListFor(model => model.Cmp_ComplainToDesignation, (SelectList)ViewBag.Designations, "Select Branch", new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.Cmp_ComplainToDesignation, (SelectList)ViewBag.ComplainTo, "Select Branch", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_ComplainToDesignation, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
-                @*<div class="form-group row  mb-2">
-            @Html.LabelFor(model => model.Cmp_ComplainTo, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.Cmp_ComplainTo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cmp_ComplainTo, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
                 <div class="form-group row mb-2">
                     @Html.LabelFor(model => model.Cmp_ComplainTo, new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.DropDownListFor(
-                            model => model.Cmp_ComplainTo,
-                            (SelectList)ViewBag.ComplainTo,
-                            "-- Select Designation --",
-                            new { @class = "form-control" }
-                        )
-                        @Html.ValidationMessageFor(model => model.Cmp_ComplainTo, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                @*<div class="form-group row  mb-2">
-            @Html.LabelFor(model => model.Cmp_ComplainCC, htmlAttributes: new { @class = "control-label col-md-4" })
-            <div class="col-md-8">
-                @Html.DropDownListFor(model => model.Cmp_ComplainCC,
-                    new SelectList(new List<SelectListItem>
-                    {
-                        new SelectListItem { Value = "Designation", Text = "Designation" },
-                        new SelectListItem { Value = "Email-Address", Text = "Email-Address" }
-                    }, "Value", "Text"),
-                    "Select Complain CC",
-                    new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Cmp_ComplainCC, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-                <div class="form-group row mb-2">
-                    @Html.LabelFor(model => model.Cmp_ComplainCC, new { @class = "control-label col-md-4" })
-                    <div class="col-md-8">
-                        @Html.DropDownListFor(
-                            model => model.Cmp_ComplainCC,
-                            (SelectList)ViewBag.ComplainTo,
-                            "-- Select Complain CC --",
-                            new { @class = "form-control" }
-                        )
+                        @Html.TextBoxFor(model => model.Cmp_ComplainCC, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_ComplainCC, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
-                <div class="form-group row  mb-2">
-                    @Html.LabelFor(model => model.Cmp_NatureOfComplaint, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                <div class="form-group row mb-2">
+                    @Html.LabelFor(model => model.Cmp_ComplainCCDesignation, new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.DropDownListFor(model => model.Cmp_NatureOfComplaint,
-                            new SelectList(new List<SelectListItem>
-                            {
-                                new SelectListItem { Value = "Type1", Text = "Type1" },
-                                new SelectListItem { Value = "Type2", Text = "Type2" }
-                            }, "Value", "Text"),
-                            "Select Nature of Complaint",
+                        @Html.DropDownListFor(
+                            model => model.Cmp_ComplainCCDesignation,
+                            (SelectList)ViewBag.ComplainTo,
+                            "-- Select Complain CC --",
+                            new { @class = "form-control" }
+                        )
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainCCDesignation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-2">
+                    @Html.LabelFor(model => model.Cmp_ComplainCC, new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.Cmp_ComplainCC, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_ComplainCC, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_Designation)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_Designation, (SelectList)ViewBag.Cmp_Master_Designations, "Select Designation", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Cmp_Designation, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <label class="col-md-4 col-form-label">
+                        @Html.LabelFor(model => model.Cmp_NatureOfComplaint)
+                    </label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Cmp_NatureOfComplaint
+                            , (SelectList)ViewBag.NatureOfComplaints, "Select Nature of Complaint",
                             new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Cmp_NatureOfComplaint, "", new { @class = "text-danger" })
                     </div>
@@ -749,8 +775,10 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
-    <script type="text/javascript">
+<script type="text/javascript">
+
         $(document).ready(function () {
+
         $("#Region").on("change", function () {
     //var region = $(this).val();
     var region = $("#Region option:selected").text();
@@ -788,11 +816,25 @@
             //    autoclose: true
             //});
 
-            $('#Lead_DateOfBirth').datepicker({
-                format: 'yyyy/mm/dd',
-                setDate: new Date(),
-                autoclose: true
+            //$('#Lead_DateOfBirth').datepicker({
+            //    format: 'yyyy/mm/dd',
+            //    autoclose: true,
+            //    endDate: new Date(),
+            //    startDate: '-120y',
+            //    startView: 2,      // YEARS view (decades)
+            //    maxViewMode: 2,    // allow decade view
+            //    minViewMode: 0,    // day selection
+            //    todayHighlight: true
+            //});
+
+            //Calculate Age
+            $('#Lead_DateOfBirth').on('changeDate change', function () {
+
+                var dob = $('#Lead_DateOfBirth').datepicker('getDate');
+                calculateAge(dob);
             });
+
+
             $('#FollowUpCallBackSchedule').datepicker({
                 format: 'yyyy/mm/dd',
                 setDate: new Date(),
@@ -806,17 +848,57 @@
                 showHideFields(ticketType);
             });
 
+            //function showHideFields(ticketType) {
+            //    if (ticketType === 'Lead Ticket') {
+            //        $('#leadFields').show();
+            //        $('#cmpFields').hide();
+            //    } else if (ticketType === 'Complain Ticket') {
+            //        $('#leadFields').hide();
+            //        $('#cmpFields').show();
+            //    } else {
+            //        $('#leadFields').hide();
+            //        $('#cmpFields').hide();
+            //    }
+            //}
             function showHideFields(ticketType) {
                 if (ticketType === 'Lead Ticket') {
                     $('#leadFields').show();
                     $('#cmpFields').hide();
+                    $('#NaFields').hide();
                 } else if (ticketType === 'Complain Ticket') {
                     $('#leadFields').hide();
+                    $('#NaFields').hide();
                     $('#cmpFields').show();
+                } else if (ticketType === 'NA') {
+                    $('#leadFields').hide();
+                    $('#cmpFields').hide();
+                    $('#NaFields').show();
                 } else {
                     $('#leadFields').hide();
                     $('#cmpFields').hide();
+                    $('#NaFields').hide();
                 }
+            }
+
+            function calculateAge(dob) {
+                if (!dob) {
+                    $('#Lead_Age').val('');
+                    $('input[name="Lead_Age"]').val('');
+                    return;
+                }
+
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                var m = today.getMonth() - dob.getMonth();
+
+                if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+
+                $('#Lead_Age').val(age);
+                $('input[name="Lead_Age"]').val(age);
+
+                $('input[name="Lead_Age"]').val(age); // hidden field
             }
         });
 
@@ -825,9 +907,68 @@
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,
                 changeYear: true,
-                autoclose: true
+                yearRange: "-120:+0",   // from 120 years ago to current year
+                maxDate: 0,             // prevent future dates
+                autoclose: true         // harmless (ignored by jQuery UI)
             });
         });
-    </script>
+
+            $("#CitizenDropdown").change(updateNRC);
+            $("#StateDivisionDropdown").change(updateNRC);
+            $("#TownshipDropdown").change(updateNRC);
+            $("#NRCRefNumber").on("blur", updateNRC);
+
+            $("#StateDivisionDropdown").change(function() {
+             var stateDivisionCode = $(this).val();
+
+             var townshipDropdown = $("#TownshipDropdown");
+
+             // Clear Township dropdown first
+             townshipDropdown.empty();
+             townshipDropdown.append('<option value="">Select Township</option>');
+
+
+    if(stateDivisionCode) {
+        $.ajax({
+            url: '@Url.Action("GetTownshipsByStateDivision")',
+            type: 'GET',
+            data: { stateDivisionCode: stateDivisionCode },
+            success: function(data) {
+                var townshipDropdown = $("#TownshipDropdown");
+                townshipDropdown.empty();
+                townshipDropdown.append('<option value="">Select Township</option>');
+                $.each(data, function(index, item) {
+                    townshipDropdown.append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                });
+            }
+        });
+    } else {
+        $("#TownshipDropdown").empty().append('<option value="">Select Township</option>');
+    }
+});
+
+        function updateNRC() {
+
+            var selectedText = $("#StateDivisionDropdown option:selected").text();
+            var divisionCode = selectedText.split('-')[0].trim();
+
+            var townshipCode = $("#TownshipDropdown").val();        // MaKaNa
+            var citizenCode = $("#CitizenDropdown").val();          // N
+            var refNumber = $("#NRCRefNumber").val();               // 123456
+
+            if (!divisionCode || !townshipCode || !citizenCode || !refNumber) {
+                $("#NRC").val("");
+                return;
+            }
+
+            var nrc = divisionCode + "/" +
+                townshipCode + "(" +
+                citizenCode + ")" +
+                refNumber;
+
+            $("#NRC").val(nrc);
+
+        }
+</script>
 }
 

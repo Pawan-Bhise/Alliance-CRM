@@ -40,6 +40,7 @@ namespace CallCenter.Models
         public string DetailConversation { get; set; }
         [Required(ErrorMessage = "Response is required")]
         public string Response { get; set; }
+        [Required(ErrorMessage = "Region is required")]
         public string TicketType { get; set; }
 
         [DataType(DataType.Date)]
@@ -186,6 +187,7 @@ namespace CallCenter.Models
         [Display(Name = "Cmp Designation")]
         public string Cmp_Designation { get; set; }
         // NA Fields
+        [Display(Name = "Na Disposition")]
         public string Na_Disposition { get; set; }
 
         public DateTime CreatedOn { get; set; } = DateTime.Now;
@@ -257,5 +259,7 @@ namespace CallCenter.Models
         public string Prev_TicketId { get; set; }
         [Display(Name = "Complain Resolve")]
         public string ComplainResolve { get; set; }
+
+        public string NRC { get; set; }
     }
 }

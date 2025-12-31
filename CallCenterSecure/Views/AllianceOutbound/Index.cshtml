@@ -75,7 +75,15 @@
 
     <div class="row padingtop-bottom20px">
         <div class="row">
+            <div class="col-md-2">
+                @Html.Label("From Date")
+                @Html.TextBoxFor(m => m.FromDate, new { @class = "form-control datepicker", placeholder = "From Date", autocomplete = "off" })
+            </div>
 
+            <div class="col-md-2">
+                @Html.Label("To Date")
+                @Html.TextBoxFor(m => m.ToDate, new { @class = "form-control datepicker", placeholder = "To Date", autocomplete = "off" })
+            </div>
             <div class="col-md-2">
                 Custmer Code
                 @Html.EditorFor(model => model.CustomerCode, new { htmlAttributes = new { @class = "form-control", placeholder = "Customer Code" } })
@@ -120,11 +128,16 @@
         <div class="row" style="margin-top:10px;">
             <div class="col-md-4" style="float: right;">
                 @*<input type="button" id="btnDownladExcel" class="btn btn-primary" value="Download Excel" onclick="exportToExcel('testTable', 'Excel Export')" style="float:right" />*@
-                <a href="/Allianceoutbound/ExportAllianceOutboundCsv"
-                   target="_blank"
-                   class="btn btn-success">
-                    Download Excel
-                </a>
+                @*<a href="/Allianceoutbound/ExportAllianceOutboundCsv"
+                       target="_blank"
+                       class="btn btn-success">
+                        Download Excel
+                    </a>*@
+                <button type="submit"
+                        class="btn btn-success"
+                        formaction="@Url.Action("ExportAllianceOutboundCsv", "Allianceoutbound")">
+                    Export
+                </button>
                 <input type="button" name="btnCreateTicket" class="btn btn-primary" value="Create New" style="float:right;margin-right:10px;" onclick="window.location= '@Url.Action("Create", "AllianceOutbound")'" />
             </div>
         </div>
@@ -167,11 +180,11 @@
                 </th>
                 <th>
                     @Html.DisplayName("Call Status")
-                    
+
                 </th>
                 <th>
                     @Html.DisplayName("Call Type")
-                    
+
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Priority)
@@ -249,10 +262,8 @@
         : item.DetailConversation)
                         </td>
                         <td style="display:none">
-                            
                         </td>
                         <td style="display:none">
-                            
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Prev_TicketId)
@@ -289,7 +300,14 @@
         }
     });
 
-
+    $(function () {
+        $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+            changeMonth: true,
+            changeYear: true,
+            autoclose: true
+        });
+    });
 
     function exportToExcel(table, name) {
         var uri = 'data:application/vnd.ms-excel;base64,'
@@ -314,6 +332,8 @@
     setTimeout(function () {
         $('.auto-close').fadeOut('slow');
     }, 3000); // 3 seconds
+
+
 
 </script>
 

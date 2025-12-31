@@ -63,70 +63,95 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table table-bordered table-striped table-hover dataTable nowrap">
-    <thead class="table-primary text-white">
-        <tr class="text-center">
-            <th>
-                @Html.DisplayNameFor(model => model.AreaCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AreaName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Village.VillageName)
-            </th>
-            <th>Active</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div class="table-responsive">
+    <table id="DataTable" class="table table-bordered table-striped table-hover dataTable nowrap">
+        <thead class="table-primary text-white">
             <tr class="text-center">
-                <td>
-                    @Html.DisplayFor(modelItem => item.AreaCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AreaName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Village.VillageName)
-                </td>
-                <td>
-                    @if (item.IsActive)
-                    {
-                        <span class="badge bg-success">Active</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Inactive</span>
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.AreaCode }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.AreaCode }) |
-                    @if (item.IsActive)
-                    {
-                        @Html.ActionLink(
-                            "Deactivate",
-                            "ToggleActive",
-                            "Area",
-                            new { Id = item.AreaCode },
-                            null
-                        )
-                    }
-                    else
-                    {
-                        @Html.ActionLink(
-                            "Activate",
-                            "ToggleActive",
-                            "Area",
-                            new { Id = item.AreaCode },
-                            null
-                        )
-                    }
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.AreaCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AreaName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Village.VillageName)
+                </th>
+                <th>Active</th>
+                <th>Actions</th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="text-center">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AreaName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Village.VillageName)
+                    </td>
+                    <td>
+                        @if (item.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Inactive</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.AreaCode }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.AreaCode }) |
+                        @if (item.IsActive)
+                        {
+                            @Html.ActionLink(
+                                "Deactivate",
+                                "ToggleActive",
+                                "Area",
+                                new { Id = item.AreaCode },
+                                null
+                            )
+                        }
+                        else
+                        {
+                            @Html.ActionLink(
+                                "Activate",
+                                "ToggleActive",
+                                "Area",
+                                new { Id = item.AreaCode },
+                                null
+                            )
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        if ($('#DataTable tbody tr').length > 0) {
+            $('#DataTable').DataTable({
+                pageLength: 10,
+                ordering: true,
+                responsive: true,
+                fixedHeader: true,
+                autoWidth: false,
+
+                dom:
+                    "<'row mb-2'<'col-md-6'l><'col-md-6 text-end'f>>" +
+                    "<'row'<'col-12'tr>>" +
+                    "<'row mt-2'<'col-md-5'i><'col-md-7 text-end'p>>",
+
+                columnDefs: [
+                    { orderable: false, targets: -1 } // Actions column
+                ]
+            });
         }
-    </tbody>
-</table>
+    });
+</script>

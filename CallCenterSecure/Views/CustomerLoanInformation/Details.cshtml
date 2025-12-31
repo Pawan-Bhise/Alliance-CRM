@@ -1,155 +1,150 @@
-﻿@model CallCenter.Models.CustomerLoanInformation
+﻿@model CallCenterSecure.Models.CustomerLoan.CustomerLoan
 
 @{
-    ViewBag.Title = "Customer Loan Information Details";
+    ViewBag.Title = "Customer Loan Details";
 }
+<style>
+    .form-control {
+        height: 38px; /* Bootstrap default */
+        line-height: 1.5;
+    }
+</style>
 
-<h2>Customer Loan Information Details</h2>
+<div class="container-fluid mt-3">
 
-<div>
-    <h4>Personal Information</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.CustomerLoanId)</dt>
-        <dd>@Html.DisplayFor(model => model.CustomerLoanId)</dd>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Customer Loan Details</h5>
+        </div>
 
-        <dt>@Html.DisplayNameFor(model => model.CustomerContactNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.CustomerContactNumber)</dd>
+        <div class="card-body">
 
-        <dt>@Html.DisplayNameFor(model => model.AccountType)</dt>
-        <dd>@Html.DisplayFor(model => model.AccountType)</dd>
+            <!-- ACCOUNT & PRODUCT INFORMATION -->
+            <h6 class="text-primary border-bottom pb-2 mb-3">
+                Account & Product Information
+            </h6>
 
-        <dt>@Html.DisplayNameFor(model => model.StaffID)</dt>
-        <dd>@Html.DisplayFor(model => model.StaffID)</dd>
+            <div class="row">
+                @*@Html.Partial("_DisplayField", new Tuple<string, object>("ID", Model.Id))*@
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Group Code", Model.GroupCode))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("CO Cash Account", Model.COCashAccount))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("CO Staff ID", Model.COStaffId))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("CO Name", Model.COName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Product Code", Model.ProductCode))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Product Name", Model.ProductName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Product Category", Model.ProductCategory))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Customer Code", Model.CustomerCode))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Account Number", Model.AccountNumber))
 
-        <dt>@Html.DisplayNameFor(model => model.GroupMemberNo)</dt>
-        <dd>@Html.DisplayFor(model => model.GroupMemberNo)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.GroupCode)</dt>
-        <dd>@Html.DisplayFor(model => model.GroupCode)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_CustomerName)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_CustomerName)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_Gender)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_Gender)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_Salutation)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_Salutation)</dd>
+                @*@Html.Partial("_DisplayField", new Tuple<string, object>("Payment Frequency", Model.PaymentFrequency))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Purpose", Model.Purpose))*@
+            </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_DateOfBirth)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_DateOfBirth)</dd>
+            <!-- BRANCH INFORMATION -->
+            <h6 class="text-primary border-bottom pb-2 mt-4 mb-3">
+                Branch Information
+            </h6>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_ClientAge)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_ClientAge)</dd>
+            <div class="row">
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Branch Code", Model.BranchCode))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Branch Name", Model.BranchName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Parent Branch", Model.ParentBranchName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Regional Branch", Model.RegionalBranchName))
+            </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_FatherName)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_FatherName)</dd>
+            <!-- CUSTOMER INFORMATION -->
+            <h6 class="text-primary border-bottom pb-2 mt-4 mb-3">
+                Customer Information
+            </h6>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_MotherName)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_MotherName)</dd>
+            <div class="row">
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Salutation", Model.DateOfActOpening))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Salutation", Model.Salutation))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Customer Name", Model.CustomerName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Gender", Model.Gender))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Father Name", Model.FatherName))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Area Type", Model.AreaType))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Area", Model.Area))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Village / Ward", Model.VillageWard))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Village Tract / Town", Model.VillageTractTown))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("City / Township", Model.CityTownship))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("District", Model.District))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Region / State", Model.RegionState))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("NRC", Model.NRC))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Mobile No 1", Model.MobileNo1))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Mobile No 2", Model.MobileNo2))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Customer Status", Model.CustomerStatus))
+                
+            </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_MaritalStatus)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_MaritalStatus)</dd>
+            <!-- ADDRESS INFORMATION -->
+            @*<h6 class="text-primary border-bottom pb-2 mt-4 mb-3">
+                Address Information
+            </h6>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_SpouseName)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_SpouseName)</dd>
+            <div class="row">
+                
+                
+            </div>*@
 
-        @*<dt>@Html.DisplayNameFor(model => model.PI_CustomerPhoto)</dt>
-        <dd>
-            @if (Model.PI_CustomerPhoto != null)
-            {
-                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.PI_CustomerPhoto)" alt="Customer Photo" />
-            }
-        </dd>*@
+            <!-- LOAN FINANCIAL DETAILS -->
+        <h6 class="text-primary border-bottom pb-2 mt-4 mb-3">
+            Loan Information
+        </h6>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_EducationalQualification)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_EducationalQualification)</dd>
+        <div class="row">
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Freeze Status", Model.FreezeStatus))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Disbursed Amount", Model.DisbursedAmount))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Installments", Model.Installments))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Installment Amount", Model.InstallmentAmount))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Installment Amount", Model.Purpose))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Business Category", Model.BusinessCategory))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Business Activity", Model.BusinessActivity))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Maturity Date", Model.MaturitydateLoan))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("PAR Client", Model.PARClient))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Days Overdue", Model.DayOfOverDue))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Area Status", Model.AreaStatus))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("LPF Amount", Model.LPFAmount))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("LPF Amount", Model.PaymentFrequency))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Principal Outstanding", Model.PrincipleOutstanding))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Interest Receivable", Model.InterestReceivable))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Non Credit Customer", Model.NonCreditCustomer))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Voluntary Depositor", Model.VoluntaryDepositor))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Poverty Score", Model.PovertyScore))
+            @Html.Partial("_DisplayField", new Tuple<string, object>("Household Surplus Income", Model.HouseholdSurplusIncome))
 
-        <dt>@Html.DisplayNameFor(model => model.PI_NRC)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_NRC)</dd>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_StateRegion)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_StateRegion)</dd>
+        </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_District)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_District)</dd>
+            <!-- OTHER DETAILS -->
+            @*<h6 class="text-primary border-bottom pb-2 mt-4 mb-3">
+                Other Details
+            </h6>*@
 
-        <dt>@Html.DisplayNameFor(model => model.PI_City)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_City)</dd>
+            @*<div class="row">
+                
+                
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Account Status", Model.AccountStatus))
+                
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Account Opening Date", Model.DateOfActOpening))
+                @Html.Partial("_DisplayField", new Tuple<string, object>("Created On", Model.CreatedOn))
+            </div>*@
 
-        <dt>@Html.DisplayNameFor(model => model.PI_VillageTractTown)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_VillageTractTown)</dd>
+        </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_VillageWard)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_VillageWard)</dd>
+        <div class="card-footer text-end">
+           @Html.ActionLink(
+                "Back to List",
+                "Index",
+                null,
+                new { @class = "btn btn-secondary btn-sm ms-2" }
+            )
+        </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_Area)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_Area)</dd>
+    </div>
 
-        <dt>@Html.DisplayNameFor(model => model.PI_Address)</dt>
-        <dd>@Html.DisplayFor(model => model.PI_Address)</dd>
-    </dl>
-
-    <h4>Business Information</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.BI_IsBusinessAddressSameAsHome)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_IsBusinessAddressSameAsHome)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_StateRegion)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_StateRegion)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_District)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_District)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_City)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_City)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_VillageTractTown)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_VillageTractTown)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_VillageWard)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_VillageWard)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_Area)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_Area)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.BI_Address)</dt>
-        <dd>@Html.DisplayFor(model => model.BI_Address)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.PrimaryMobileNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.PrimaryMobileNumber)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.AlternateMobileNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.AlternateMobileNumber)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Latitude)</dt>
-        <dd>@Html.DisplayFor(model => model.Latitude)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Longitude)</dt>
-        <dd>@Html.DisplayFor(model => model.Longitude)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.Branch)</dt>
-        <dd>@Html.DisplayFor(model => model.Branch)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.ClientOfficerName)</dt>
-        <dd>@Html.DisplayFor(model => model.ClientOfficerName)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.ProductInterested)</dt>
-        <dd>@Html.DisplayFor(model => model.ProductInterested)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CustomerStatus)</dt>
-        <dd>@Html.DisplayFor(model => model.CustomerStatus)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.CreatedOn)</dt>
-        <dd>@Html.DisplayFor(model => model.CreatedOn)</dd>
-
-        <dt>@Html.DisplayNameFor(model => model.ModifiedOn)</dt>
-        <dd>@Html.DisplayFor(model => model.ModifiedOn)</dd>
-    </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerLoanId }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

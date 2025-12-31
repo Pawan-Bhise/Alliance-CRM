@@ -281,15 +281,6 @@
                     <!-- Dropdowns in one row -->
                     <div class="row mb-2">
                         <div class="col-md-4">
-                            <label>Citizen</label>
-                            @Html.DropDownList(
-                                "CitizenDropdown",
-                                (SelectList)ViewBag.CitizenList,
-                                "Select Citizen",
-                                new { @class = "form-control" }
-                            )
-                        </div>
-                        <div class="col-md-4">
                             <label>State Division</label>
                             @Html.DropDownList(
                                 "StateDivisionDropdown",
@@ -304,6 +295,16 @@
                                 <option value="">Select Township</option>
                             </select>
                         </div>
+                        <div class="col-md-4">
+                            <label>Citizen</label>
+                            @Html.DropDownList(
+                                "CitizenDropdown",
+                                (SelectList)ViewBag.CitizenList,
+                                "Select Citizen",
+                                new { @class = "form-control" }
+                            )
+                        </div>
+                        
                         <div class="col-md-4">
                             <label>Ref. Number</label>
                             <input id="NRCRefNumber" type="text" />
@@ -328,8 +329,9 @@
             <div class="form-group row mb-3">
                 @Html.LabelFor(m => m.Age, new { @class = "col-md-4 col-form-label" })
                 <div class="col-md-8">
-                    @Html.EditorFor(m => m.Age, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(m => m.Age, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
                     @Html.ValidationMessageFor(m => m.Age, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Age)
                 </div>
             </div>
 
@@ -569,7 +571,16 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
-    $(document).ready(function () {
+        $(document).ready(function () {
+
+            DateOfBirth
+
+            $('#DateOfBirth').on('changeDate change', function () {
+
+                var dob = $('#DateOfBirth').datepicker('getDate');
+                calculateAge(dob);
+            });
+
 
         $("#CitizenDropdown").change(updateNRC);
         $("#StateDivisionDropdown").change(updateNRC);
@@ -640,6 +651,8 @@
             });
 
         $(function () {
+            var currentYear = new Date().getFullYear();
+
             $(".datepicker").datepicker({
                 dateFormat: "yy-mm-dd",
                 timeFormat: "HH:mm:ss",
@@ -647,7 +660,8 @@
                 changeYear: true,
                 autoclose: true,
                 setDate: new Date(),
-                endDate: '+0d'
+                endDate: '+0d',
+                yearRange: (currentYear - 100) + ":" + (currentYear + 100)
             });
         });
 
@@ -662,8 +676,10 @@
         });
 
         function updateNRC() {
+            
+        var selectedText = $("#StateDivisionDropdown option:selected").text();
+        var divisionCode = selectedText.split('-')[0].trim();
 
-        var divisionCode = $("#StateDivisionDropdown").val();   // 1
         var townshipCode = $("#TownshipDropdown").val();        // MaKaNa
         var citizenCode = $("#CitizenDropdown").val();          // N
         var refNumber = $("#NRCRefNumber").val();               // 123456
@@ -681,6 +697,28 @@
         $("#NRC").val(nrc);
 
 
-    }
+        }
+
+        function calculateAge(dob) {
+            if (!dob) {
+                $('#Age').val('');
+                $('input[name="Age"]').val('');
+                return;
+            }
+
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            $('#Age').val(age);
+            $('input[name="Age"]').val(age);
+
+            $('input[name="Age"]').val(age); // hidden field
+        }
+
     </script>
 }

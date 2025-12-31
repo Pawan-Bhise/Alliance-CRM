@@ -94,5 +94,15 @@ namespace CallCenterSecure.Models
         public string Prev_TicketId { get; set; }
         [Display(Name = "Detail Conversation")]
         public string DetailConversation { get; set; }
+
+        [NotMapped]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        public DateTime? FromDate { get; set; }
+
+        [NotMapped]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        public DateTime? ToDate { get; set; }
     }
 }

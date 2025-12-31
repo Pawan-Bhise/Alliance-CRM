@@ -1,18 +1,22 @@
-﻿using System;
+﻿using CallCenter.CustomAuthentication;
+using CallCenter.Models;
+using CallCenterSecure.Models;
+using CallCenterSecure.Models.Outbound;
+using CallCenterSecure.Repositories;
+using Microsoft.Diagnostics.Tracing.Parsers.MicrosoftWindowsWPF;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Mvc;
-using CallCenter.CustomAuthentication;
-using CallCenter.Models;
-using CallCenterSecure.Models;
 
 namespace CallCenter.Controllers
 {
     public class AllianceOutboundController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        private CustomerRepository customerRepository = new CustomerRepository();
 
         // GET: AllianceOutbound/Create
         public ActionResult Create()
@@ -128,7 +132,8 @@ namespace CallCenter.Controllers
 
             ViewBag.CitizenList = new SelectList(
                 db.Citizen
-                  .Select(c => new {
+                  .Select(c => new
+                  {
                       Value = c.Code,
                       Text = c.Code + " - " + c.Reference
                   })
@@ -139,8 +144,9 @@ namespace CallCenter.Controllers
 
             ViewBag.StateDivisionList = new SelectList(
                 db.StateDivision
-                  .Select(s => new {
-                      Value = s.StateDivisionCode, // or s.StateDivisionCode if you prefer
+                  .Select(s => new
+                  {
+                      Value = s.Id, // or s.StateDivisionCode if you prefer
                       Text = s.StateDivisionCode + " - " + s.StateDivisionName
                   })
                   .ToList(),
@@ -153,7 +159,7 @@ namespace CallCenter.Controllers
         // GET: AllianceOutbound/Index
         public ActionResult Index()
         {
-            var outBound = db.AllianceOutbounds.OrderByDescending(o=>o.AllianceOutboundId).ToList();
+            var outBound = db.AllianceOutbounds.OrderByDescending(o => o.AllianceOutboundId).ToList();
             foreach (var item in outBound)
             {
                 int num = 0;
@@ -176,6 +182,11 @@ namespace CallCenter.Controllers
         {
 
             var outBound = db.AllianceOutbounds.ToList();
+
+            if (allianceOutbound.FromDate != null)
+                outBound = outBound.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date >= Convert.ToDateTime(allianceOutbound.FromDate).Date).ToList();
+            if (allianceOutbound.ToDate != null)
+                outBound = outBound.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date <= Convert.ToDateTime(allianceOutbound.ToDate).Date).ToList();
 
             if (!string.IsNullOrEmpty(allianceOutbound.CustomerCode))
                 outBound = outBound.Where(tl => tl.CustomerCode == allianceOutbound.CustomerCode).ToList();
@@ -262,16 +273,31 @@ namespace CallCenter.Controllers
             return Json(villages, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ExportAllianceOutboundCsv()
+        public ActionResult ExportAllianceOutboundCsv(AllianceOutbound allianceOutbound)
         {
-            var data = db.AllianceOutbounds
-                         .OrderByDescending(x => x.AllianceOutboundId)
-                         .ToList();
+
+            var data = customerRepository.GetDataOutboudAllExcel();
+
+            if (allianceOutbound.FromDate != null)
+                data = data.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date >= Convert.ToDateTime(allianceOutbound.FromDate).Date).ToList();
+            if (allianceOutbound.ToDate != null)
+                data = data.Where(tl => tl.DateTime != null && Convert.ToDateTime(tl.DateTime).Date <= Convert.ToDateTime(allianceOutbound.ToDate).Date).ToList();
+
+            if (!string.IsNullOrEmpty(allianceOutbound.CustomerCode))
+                data = data.Where(tl => tl.CustomerCode == allianceOutbound.CustomerCode).ToList();
+            if (!string.IsNullOrEmpty(allianceOutbound.CallType))
+                data = data.Where(tl => tl.CallType == allianceOutbound.CallType).ToList();
+            if (!string.IsNullOrEmpty(allianceOutbound.CallStatus))
+                data = data.Where(tl => tl.CallStatus == allianceOutbound.CallStatus).ToList();
+            if (!string.IsNullOrEmpty(allianceOutbound.PrimaryMobileNumberSearch))
+                data = data.Where(tl => tl.PrimaryMobileNumber.Contains(allianceOutbound.PrimaryMobileNumberSearch)).ToList();
+            if (!string.IsNullOrEmpty(allianceOutbound.TicketID))
+                data = data.Where(tl => tl.TicketID == allianceOutbound.TicketID).ToList();
 
             var sb = new StringBuilder();
 
             // ✅ FIX: correct type
-            var props = typeof(AllianceOutbound).GetProperties();
+            var props = typeof(AllianceOutboundExcelModel).GetProperties();
 
             // Header
             sb.AppendLine(string.Join(",", props.Select(p => p.Name)));

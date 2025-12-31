@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CallCenter.Models.NatureOfComplaints>
+
+@{
+    ViewBag.Title = "Nature of Complaint List";
+    int srNo = 1;
+}
+
+<h2>Nature of Complaint List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sr. No.</th>
+            <th>@Html.DisplayNameFor(model => model.ComplaintId)</th>
+            <th>@Html.DisplayNameFor(model => model.ComplaintsDescrption)</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@srNo</td>
+                <td>@Html.DisplayFor(modelItem => item.ComplaintId)</td>
+                <td>@Html.DisplayFor(modelItem => item.ComplaintsDescrption)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ComplaintId }) |
+                    @if (item.IsActive)
+                    {
+                        @Html.ActionLink(
+                            "Deactivate",
+                            "ToggleActive",
+                            "NatureOfComplaints",
+                            new { Id = item.ComplaintId },
+                            null
+                        )
+                    }
+                    else
+                    {
+                        @Html.ActionLink(
+                            "Activate",
+                            "ToggleActive",
+                            "NatureOfComplaints",
+                            new { Id = item.ComplaintId },
+                            null
+                        )
+                    }
+                </td>
+            </tr>
+            srNo++;
+        }
+    </tbody>
+</table>

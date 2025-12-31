@@ -1,0 +1,147 @@
+﻿@model IEnumerable<CallCenter.Models.ComplaintDesignation>
+
+@{
+    ViewBag.Title = "Complaint Designation List";
+    int srNo = 1;
+}
+<style>
+    /* DataTable cell content with proper wrapping */
+    table.dataTable tbody td.cell-content {
+        max-width: 10rem; /* wider for readability */
+        min-width: 8rem;
+        width: auto;
+        overflow: hidden;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: normal;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    /* Button cell styling */
+    table.dataTable tbody td.cell-buttons {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+        /* Ensure buttons stay centered */
+        table.dataTable tbody td.cell-buttons .btn {
+            margin: 0.2rem;
+        }
+
+    /* General table overrides */
+    table.dataTable tbody td {
+        white-space: normal;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Table header text alignment */
+    table.dataTable thead th {
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* Responsive table wrapper */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* Card spacing */
+    .card-body .row > div {
+        margin-bottom: 0.75rem;
+    }
+
+    /* Fix for DataTables horizontal scroll */
+    .dataTables_wrapper .dataTables_scroll {
+        overflow-x: auto !important;
+    }
+</style>
+
+<h2>Complaint Designation List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="table-responsive">
+
+</div>
+<table id="DataTable" class="table table-bordered table-striped table-hover dataTable nowrap">
+    <thead class="table-primary text-white">
+        <tr class="text-center">
+            <th>Sr. No.</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>Active</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@srNo</td>
+                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ComplaintDesignationId }) |
+                    @if (item.IsActive)
+                    {
+                        @Html.ActionLink(
+                            "Deactivate",
+                            "ToggleActive",
+                            "ComplaintDesignation",
+                            new { Id = item.ComplaintDesignationId },
+                            null
+                        )
+                    }
+                    else
+                    {
+                        @Html.ActionLink(
+                            "Activate",
+                            "ToggleActive",
+                            "ComplaintDesignation",
+                            new { Id = item.ComplaintDesignationId },
+                            null
+                        )
+                    }
+                </td>
+            </tr>
+            srNo++;
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        if ($('#DataTable tbody tr').length > 0) {
+            $('#DataTable').DataTable({
+                pageLength: 10,
+                ordering: true,
+                responsive: true,
+                fixedHeader: true,
+                autoWidth: false,
+
+                dom:
+                    "<'row mb-2'<'col-md-6'l><'col-md-6 text-end'f>>" +
+                    "<'row'<'col-12'tr>>" +
+                    "<'row mt-2'<'col-md-5'i><'col-md-7 text-end'p>>",
+
+                columnDefs: [
+                    { orderable: false, targets: -1 } // Actions column
+                ]
+            });
+        }
+    });
+</script>

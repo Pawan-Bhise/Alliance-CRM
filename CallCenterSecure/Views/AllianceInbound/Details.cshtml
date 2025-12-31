@@ -223,8 +223,16 @@
                     <div class="detail-value">@Html.DisplayFor(m => m.Cmp_ComplainTo)</div>
                 </div>
                 <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Cmp_ComplainCCDesignation):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Cmp_ComplainCCDesignation)</div>
+                </div>
+                <div class="detail-row">
                     <strong class="detail-label">@Html.DisplayNameFor(m => m.Cmp_ComplainCC):</strong>
                     <div class="detail-value">@Html.DisplayFor(m => m.Cmp_ComplainCC)</div>
+                </div>
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Cmp_Designation):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Cmp_Designation)</div>
                 </div>
                 <div class="detail-row">
                     <strong class="detail-label">@Html.DisplayNameFor(m => m.Cmp_NatureOfComplaint):</strong>
@@ -303,8 +311,8 @@
                     <div class="detail-value">@Html.DisplayFor(m => m.Lead_Longitude)</div>
                 </div>
                 <div class="detail-row">
-                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Lead_NRC):</strong>
-                    <div class="detail-value">@Html.DisplayFor(m => m.Lead_NRC)</div>
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.NRC):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.NRC)</div>
                 </div>
                 <div class="detail-row">
                     <strong class="detail-label">@Html.DisplayNameFor(m => m.Lead_DateOfBirth):</strong>
@@ -335,14 +343,19 @@
                     <div class="detail-value">@Html.DisplayFor(m => m.Lead_LeadStatus)</div>
                 </div>
             </div>
+
+            <div id="NaFields" style="display: none;">
+                <div class="detail-row">
+                    <strong class="detail-label">@Html.DisplayNameFor(m => m.Na_Disposition):</strong>
+                    <div class="detail-value">@Html.DisplayFor(m => m.Na_Disposition)</div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Lead fields -->
+            <!-- CMP fields -->
+
         </div>
-
-        <!-- Lead fields -->
-        
-
-        <!-- CMP fields -->
-        
-    </div>
 
 
     <!-- Lead fields -->
@@ -398,21 +411,31 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var ticketType = '@Model.TicketType';
+
+            debugger;
                         
             showHideFields(ticketType);
-
-            function showHideFields(ticketType) {
-                if (ticketType === 'Lead Ticket') {
-                    $('#leadFields').show();
-                    $('#cmpFields').hide();
-                } else if (ticketType === 'Complain Ticket') {
-                    $('#leadFields').hide();
-                    $('#cmpFields').show();
-                } else {
-                    $('#leadFields').hide();
-                    $('#cmpFields').hide();
-                }
-            }
+            
         });
+
+        function showHideFields(ticketType) {
+            if (ticketType === 'Lead Ticket') {
+                $('#leadFields').show();
+                $('#cmpFields').hide();
+                $('#NaFields').hide();
+            } else if (ticketType === 'Complain Ticket') {
+                $('#leadFields').hide();
+                $('#NaFields').hide();
+                $('#cmpFields').show();
+            } else if (ticketType === 'NA') {
+                $('#leadFields').hide();
+                $('#cmpFields').hide();
+                $('#NaFields').show();
+            } else {
+                $('#leadFields').hide();
+                $('#cmpFields').hide();
+                $('#NaFields').hide();
+            }
+        }
     </script>
 }

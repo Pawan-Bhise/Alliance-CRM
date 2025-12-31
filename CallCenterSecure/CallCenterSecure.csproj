@@ -308,9 +308,11 @@
     <Compile Include="Controllers\AllianceDesignation.cs" />
     <Compile Include="Controllers\AllianceInboundController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
+    <Compile Include="Controllers\ComplaintDesgnationController.cs" />
     <Compile Include="Controllers\CustomerLoanInformationController.cs" />
     <Compile Include="Controllers\MIMULocationController.cs" />
     <Compile Include="Controllers\AreaController.cs" />
+    <Compile Include="Controllers\NatureOfComplaintController.cs" />
     <Compile Include="Controllers\OriginsController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\RegionsController.cs" />
@@ -383,6 +385,26 @@
     <Compile Include="Migrations\202512181857178_UpdateCustomerLoanTable.Designer.cs">
       <DependentUpon>202512181857178_UpdateCustomerLoanTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202512211742019_satbeer_changes.cs" />
+    <Compile Include="Migrations\202512211742019_satbeer_changes.Designer.cs">
+      <DependentUpon>202512211742019_satbeer_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202512251120578_TestChange.cs" />
+    <Compile Include="Migrations\202512251120578_TestChange.Designer.cs">
+      <DependentUpon>202512251120578_TestChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202512251153306_cmp_des_updates.cs" />
+    <Compile Include="Migrations\202512251153306_cmp_des_updates.Designer.cs">
+      <DependentUpon>202512251153306_cmp_des_updates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202512270956059_new_changes.cs" />
+    <Compile Include="Migrations\202512270956059_new_changes.Designer.cs">
+      <DependentUpon>202512270956059_new_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202512310956468_add_Inbound_TicketType_req.cs" />
+    <Compile Include="Migrations\202512310956468_add_Inbound_TicketType_req.Designer.cs">
+      <DependentUpon>202512310956468_add_Inbound_TicketType_req.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AllianceOutbound.cs" />
     <Compile Include="Models\AllianceProduct.cs" />
@@ -390,10 +412,12 @@
     <Compile Include="Models\AllianceDesignation.cs" />
     <Compile Include="Models\AllianceInbound.cs" />
     <Compile Include="Models\ClientInfo.cs" />
+    <Compile Include="Models\ComplaintDesignation.cs" />
     <Compile Include="Models\CustomerInfoModel.cs" />
     <Compile Include="Models\CustomerLoanInformation.cs" />
     <Compile Include="Models\CustomerLoan\CustomerLoan.cs" />
     <Compile Include="Models\CustomerLoan\CustomerLoanView.cs" />
+    <Compile Include="Models\Inbound\AllianceInboundExcelModel.cs" />
     <Compile Include="Models\Inbound\Designations.cs" />
     <Compile Include="Models\Inbound\InboundGridData.cs" />
     <Compile Include="Models\MIMULocation.cs" />
@@ -401,6 +425,8 @@
     <Compile Include="Models\ChartSRTicketModel.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Area.cs" />
+    <Compile Include="Models\NatureOfComplaints.cs" />
+    <Compile Include="Models\Outbound\AllianceOutboundExcelModel.cs" />
     <Compile Include="Models\Outbound\Citizen.cs" />
     <Compile Include="Models\Outbound\StateDivision.cs" />
     <Compile Include="Models\Outbound\Township.cs" />
@@ -620,6 +646,16 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\AllianceOutbound\Details.cshtml" />
+    <Content Include="Views\Shared\_DisplayField.cshtml" />
+    <Content Include="Views\Create.cshtml" />
+    <Content Include="Views\Edit.cshtml" />
+    <Content Include="Views\index.cshtml" />
+    <Content Include="Views\ComplaintDesignation\Create.cshtml" />
+    <Content Include="Views\ComplaintDesignation\Edit.cshtml" />
+    <Content Include="Views\ComplaintDesignation\index.cshtml" />
+    <Content Include="Views\NatureOfComplaints\Create.cshtml" />
+    <Content Include="Views\NatureOfComplaints\Edit.cshtml" />
+    <Content Include="Views\NatureOfComplaints\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.11.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
@@ -655,6 +691,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202512181857178_UpdateCustomerLoanTable.resx">
       <DependentUpon>202512181857178_UpdateCustomerLoanTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202512211742019_satbeer_changes.resx">
+      <DependentUpon>202512211742019_satbeer_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202512251120578_TestChange.resx">
+      <DependentUpon>202512251120578_TestChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202512251153306_cmp_des_updates.resx">
+      <DependentUpon>202512251153306_cmp_des_updates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202512270956059_new_changes.resx">
+      <DependentUpon>202512270956059_new_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202512310956468_add_Inbound_TicketType_req.resx">
+      <DependentUpon>202512310956468_add_Inbound_TicketType_req.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

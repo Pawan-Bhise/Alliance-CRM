@@ -14,6 +14,7 @@ using ClosedXML.Excel;
 using CallCenterSecure.Repositories;
 using CallCenterSecure.Models.CustomerLoan;
 using System.Globalization;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 
 namespace CallCenter.Controllers
@@ -36,7 +37,7 @@ namespace CallCenter.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CustomerLoanInformation customerLoanInformation = db.CustomerLoanInformations.Find(id);
+            CustomerLoan customerLoanInformation = db.CustomerLoan.Find(id);
             if (customerLoanInformation == null)
             {
                 return HttpNotFound();
@@ -147,10 +148,12 @@ namespace CallCenter.Controllers
 
                 // Bulk insert                
                 db.CustomerLoan.AddRange(customers);
-                db.SaveChanges();                
+                db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Record uoloaded successfully!";
             }
 
-            return View(db.CustomerLoan.ToList());
+            return RedirectToAction("Index");
         }
         
         [HttpPost]
@@ -224,40 +227,110 @@ namespace CallCenter.Controllers
         }
 
         // POST: CustomerLoanInformation/Edit/5
+        // POST: CustomerLoan/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CustomerLoanInformation customerLoanInformation, HttpPostedFileBase PI_CustomerPhoto)
+        public ActionResult Edit(CustomerLoan model, HttpPostedFileBase PI_CustomerPhoto)
         {
             if (ModelState.IsValid)
             {
-                //if (PI_CustomerPhoto != null && PI_CustomerPhoto.ContentLength > 0)
-                //{
-                //    using (var reader = new System.IO.BinaryReader(PI_CustomerPhoto.InputStream))
-                //    {
-                //        customerLoanInformation.PI_CustomerPhoto = reader.ReadBytes(PI_CustomerPhoto.ContentLength);
-                //    }
-                //}
-                customerLoanInformation.ModifiedOn = DateTime.Now;
-                db.Entry(customerLoanInformation).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    var existing = db.CustomerLoan.Find(model.Id);
+                    if (existing == null)
+                        return HttpNotFound();
+
+                    // Optional: handle uploaded photo
+                    //if (PI_CustomerPhoto != null && PI_CustomerPhoto.ContentLength > 0)
+                    //{
+                    //    using (var reader = new System.IO.BinaryReader(PI_CustomerPhoto.InputStream))
+                    //    {
+                    //        existing.PI_CustomerPhoto = reader.ReadBytes(PI_CustomerPhoto.ContentLength);
+                    //    }
+                    //}
+
+                    // Update all 49 editable columns explicitly
+                    existing.GroupCode = model.GroupCode;
+                    existing.COCashAccount = model.COCashAccount;
+                    existing.COStaffId = model.COStaffId;
+                    existing.COName = model.COName;
+                    existing.ProductCode = model.ProductCode;
+                    existing.ProductName = model.ProductName;
+                    existing.ProductCategory = model.ProductCategory;
+                    existing.CustomerCode = model.CustomerCode;
+                    existing.AccountNumber = model.AccountNumber;
+                    existing.BranchCode = model.BranchCode;
+                    existing.BranchName = model.BranchName;
+                    existing.ParentBranchName = model.ParentBranchName;
+                    existing.RegionalBranchName = model.RegionalBranchName;
+                    existing.DateOfActOpening = model.DateOfActOpening;
+                    existing.Salutation = model.Salutation;
+                    existing.CustomerName = model.CustomerName;
+                    existing.Gender = model.Gender;
+                    existing.FatherName = model.FatherName;
+                    existing.AreaType = model.AreaType;
+                    existing.Area = model.Area;
+                    existing.VillageWard = model.VillageWard;
+                    existing.VillageTractTown = model.VillageTractTown;
+                    existing.CityTownship = model.CityTownship;
+                    existing.District = model.District;
+                    existing.RegionState = model.RegionState;
+                    existing.NRC = model.NRC;
+                    existing.MobileNo1 = model.MobileNo1;
+                    existing.MobileNo2 = model.MobileNo2;
+                    existing.CustomerStatus = model.CustomerStatus;
+                    existing.FreezeStatus = model.FreezeStatus;
+                    existing.DisbursedAmount = model.DisbursedAmount;
+                    existing.Installments = model.Installments;
+                    existing.InstallmentAmount = model.InstallmentAmount;
+                    existing.Purpose = model.Purpose;
+                    existing.BusinessCategory = model.BusinessCategory;
+                    existing.BusinessActivity = model.BusinessActivity;
+                    existing.MaturitydateLoan = model.MaturitydateLoan;
+                    existing.PARClient = model.PARClient;
+                    existing.DayOfOverDue = model.DayOfOverDue;
+                    existing.AreaStatus = model.AreaStatus;
+                    existing.PaymentFrequency = model.PaymentFrequency;
+                    existing.PrincipleOutstanding = model.PrincipleOutstanding;
+                    existing.InterestReceivable = model.InterestReceivable;
+                    existing.NonCreditCustomer = model.NonCreditCustomer;
+                    existing.VoluntaryDepositor = model.VoluntaryDepositor;
+                    existing.PovertyScore = model.PovertyScore;
+                    existing.HouseholdSurplusIncome = model.HouseholdSurplusIncome;
+
+
+                    db.SaveChanges();
+                    TempData["SuccessMessage"] = "Record updated successfully!";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Something went wrong. Please try again.";
+                    throw;
+                }
+
                 return RedirectToAction("Index");
             }
 
-            ViewBag.AccountTypes = new SelectList(new[] { "Individual", "Joint" }, customerLoanInformation.AccountType);
-            ViewBag.Genders = new SelectList(new[] { "Male", "Female", "Other" }, customerLoanInformation.PI_Gender);
-            ViewBag.MaritalStatuses = new SelectList(new[] { "Single", "Married", "Divorced", "Widowed" }, customerLoanInformation.PI_MaritalStatus);
-            ViewBag.EducationalQualifications = new SelectList(new[] { "Primary", "Middle", "High School", "Graduate", "Post Graduate" }, customerLoanInformation.PI_EducationalQualification);
-            ViewBag.CustomerStatuses = new SelectList(new[] { "Active", "Inactive" }, customerLoanInformation.CustomerStatus);
-            ViewBag.States = new SelectList(db.States, "StateName", "StateName", customerLoanInformation.PI_StateRegion);
-            ViewBag.Districts = new SelectList(db.Districts, "DistrictName", "DistrictName", customerLoanInformation.PI_District);
-            ViewBag.Cities = new SelectList(db.Cities, "CityName", "CityName", customerLoanInformation.PI_City);
-            ViewBag.VillageTracts = new SelectList(db.VillageTracts, "VillageTractName", "VillageTractName", customerLoanInformation.PI_VillageTractTown);
-            ViewBag.Villages = new SelectList(db.Villages, "VillageName", "VillageName", customerLoanInformation.PI_VillageWard);
-            ViewBag.Areas = new SelectList(db.Areas, "AreaName", "AreaName", customerLoanInformation.PI_Area);
-            ViewBag.Branches = new SelectList(db.AllianceBranches, "BranchName", "BranchName", customerLoanInformation.Branch);
-            ViewBag.Products = new SelectList(db.Products, "ProductName", "ProductName", customerLoanInformation.ProductInterested);
-            return View(customerLoanInformation);
+            // Re-populate dropdowns in case of validation errors
+            //ViewBag.AccountTypes = new SelectList(new[] { "Individual", "Joint" }, model.AccountType);
+            ViewBag.Genders = new SelectList(new[] { "Male", "Female", "Other" }, model.Gender);
+            //ViewBag.MaritalStatuses = new SelectList(new[] { "Single", "Married", "Divorced", "Widowed" }, model.PI_MaritalStatus);
+            //ViewBag.EducationalQualifications = new SelectList(new[] { "Primary", "Middle", "High School", "Graduate", "Post Graduate" }, model.PI_EducationalQualification);
+            ViewBag.CustomerStatuses = new SelectList(new[] { "Active", "Inactive" }, model.CustomerStatus);
+            ViewBag.FreezeStatuses = new SelectList(new[] { "Yes", "No" }, model.FreezeStatus);
+            ViewBag.States = new SelectList(db.States, "StateName", "StateName", model.RegionState);
+            ViewBag.Districts = new SelectList(db.Districts, "DistrictName", "DistrictName", model.District);
+            ViewBag.Cities = new SelectList(db.Cities, "CityName", "CityName", model.CityTownship);
+            ViewBag.VillageTracts = new SelectList(db.VillageTracts, "VillageTractName", "VillageTractName", model.VillageTractTown);
+            ViewBag.Villages = new SelectList(db.Villages, "VillageName", "VillageName", model.VillageWard);
+            ViewBag.Areas = new SelectList(db.Areas, "AreaName", "AreaName", model.Area);
+            ViewBag.Branches = new SelectList(db.AllianceBranches, "BranchName", "BranchName", model.BranchName);
+            ViewBag.Products = new SelectList(db.Products, "ProductName", "ProductName", model.ProductName);
+            //ViewBag.BusinessCategories = new SelectList(db.BusinessCategories, "CategoryName", "CategoryName", model.BusinessCategory);
+
+            return View(model);
         }
+
 
         // GET: CustomerLoanInformation/Delete/5
         public ActionResult Delete(string id)

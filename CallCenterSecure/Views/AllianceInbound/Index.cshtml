@@ -2,6 +2,7 @@
 @*<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>*@
 <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+
 <style>
     /* DataTable cell content with proper wrapping */
     table.dataTable tbody td.cell-content {
@@ -124,20 +125,13 @@
                         </a>
                     </div>
 
-                    <div>
-                        @*<button id="btnDownloadExcel" class="btn btn-primary" onclick="@Url.Action("ExportAllianceInboundCsv")">
-            Download Excel <i class="bi bi-file-earmark-spreadsheet"></i>
-        </button>*@
-                        @*<button id="btnDownloadExcel"
-                class="btn btn-primary"
-                onclick="window.location.href='@Url.Action("ExportAllianceInboundCsv", "AllianceInbound")'">
-            Download Excel <i class="bi bi-file-earmark-spreadsheet"></i>
-        </button>*@
-                        <a href="/AllianceInbound/ExportAllianceInboundCsv"
-                           target="_blank"
-                           class="btn btn-success">
-                            Download Excel
-                        </a>
+                    <div>                        
+
+                        <button type="submit"
+                                class="btn btn-success"
+                                formaction="@Url.Action("ExportAllianceInboundCsv", "AllianceInbound")">
+                            Export
+                        </button>
                     </div>
                 </div>
             </div>
@@ -165,7 +159,6 @@
             Inbound Call Records <i class="bi bi-card-list"></i>
         </strong>
     </div>
-
 
     <table id="inboundTable" class="table table-bordered table-striped table-hover dataTable nowrap">
         <thead class="table-primary text-white">
@@ -245,19 +238,14 @@
             }
         });
 
-        //function exportToExcel(tableId, filename) {
-        //    var table = document.getElementById(tableId);
-        //    var wb = XLSX.utils.table_to_book(table, { sheet: "Inbound Calls" });
-        //    XLSX.writeFile(wb, filename + ".xlsx");
-        //}
-
-
         $(function () {
             $(".datepicker").datepicker({
                 dateFormat: "yy-mm-dd",
                 changeMonth: true,
                 changeYear: true,
-                autoclose: true
+                yearRange: "-120:+0",   // from 120 years ago to current year
+                maxDate: 0,             // prevent future dates
+                autoclose: true         // harmless (ignored by jQuery UI)
             });
         });
 

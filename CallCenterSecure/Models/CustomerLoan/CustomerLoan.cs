@@ -49,7 +49,8 @@ namespace CallCenterSecure.Models.CustomerLoan
 
         [MaxLength(150)]
         public string RegionalBranchName { get; set; }
-
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfActOpening { get; set; }
         
         public int Salutation { get; set; }

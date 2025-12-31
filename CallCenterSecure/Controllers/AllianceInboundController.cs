@@ -1,22 +1,26 @@
 ﻿using CallCenter.CustomAuthentication;
 using CallCenter.Models;
 using CallCenter.Models.ViewModels;
+using CallCenterSecure.Models;
+using CallCenterSecure.Models.Inbound;
+using CallCenterSecure.Repositories;
+using Dapper;
+using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;   // or Npgsql/MySql depending on DB
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Mvc;
-using System.Data;
-using System.Data.SqlClient;   // or Npgsql/MySql depending on DB
-using Dapper;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using CallCenterSecure.Repositories;
 using System.Text;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.EMMA;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace CallCenter.Controllers
 {
@@ -60,7 +64,6 @@ namespace CallCenter.Controllers
 
                 if (ModelState.IsValid)
                 {
-
                     if (allianceInbound.File != null && allianceInbound.File.ContentLength > 0)
                     {
                         // Generate a unique file name
@@ -106,35 +109,17 @@ namespace CallCenter.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             AllianceInbound allianceInbound = db.AllianceInbounds.Find(id);
             if (allianceInbound == null)
             {
                 return HttpNotFound();
             }
-            
+
             //clear spacing
             allianceInbound.Cmp_Branch = Normalize(allianceInbound.Cmp_Branch);
-            //allianceInbound.Cmp_ComplainToDesignation = allianceInbound.Cmp_ComplainToDesignation.Trim();
 
             PopulateDropdowns();
-
-            //    var region = allianceInbound?.Region;
-            //    //Get branches 
-
-            //    var branches = db.RegionBranches
-            //                     .Where(r => r.Region == region)
-            //                     .Select(r => new
-            //                     {
-            //                         Value = r.Id,
-            //                         Text = r.BranchName
-            //                     })
-            //                     .ToList();
-
-            //    ViewBag.SeletedBranches = new SelectList(
-            //branches.Select(b => b.Text).ToList(),
-            //allianceInbound.Branch?.Trim()
-            //);
-
 
             return View(allianceInbound);
         }
@@ -261,7 +246,8 @@ namespace CallCenter.Controllers
             ViewBag.Cities = new SelectList(db.Cities.Select(c => new { Value = c.CityCode, Text = c.CityName }), "Value", "Text");
             ViewBag.VillageTracts = new SelectList(db.VillageTracts.Select(vt => new { Value = vt.VillageTractCode, Text = vt.VillageTractName }), "Value", "Text");
             ViewBag.Villages = new SelectList(db.Villages.Select(v => new { Value = v.VillageCode, Text = v.VillageName }), "Value", "Text");
-            //ViewBag.Designations = new SelectList(db.AllianceDesignations.Distinct(d=>d.Designation).Select(d => new { Value = d.DesignationID, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
+
+
             ViewBag.Designations = new SelectList(
             db.AllianceDesignations
               .Where(d => d.Designation != null && d.Designation != "")
@@ -272,9 +258,35 @@ namespace CallCenter.Controllers
             "Value",
             "Text"
             );
-            //ViewBag.ComplainTo = new SelectList(db.AllianceDesignations.Where(d => d.EmailAddress != string.Empty && d.EmailAddress != null).Select(d => new { Value = d.EmailAddress, Text = d.EmailAddress }), "Value", "Text");
-            //ViewBag.Designations = new SelectList(db.Designations.Select(d => new { Value = d.DesignationId, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
             ViewBag.ComplainTo = new SelectList(db.Designations.Select(d => new { Value = d.DesignationId, Text = d.Designation }).OrderBy(d => d.Text), "Value", "Text");
+
+            ViewBag.Cmp_Master_Designations = new SelectList(db.ComplaintDesignations.Select(d => new { Value = d.ComplaintDesignationId, Text = d.Description }).OrderBy(d => d.Text), "Value", "Text");
+
+            ViewBag.NatureOfComplaints = new SelectList(db.NatureOfComplaint.Select(d => new { Value = d.ComplaintId, Text = d.ComplaintsDescrption }).OrderBy(d => d.Text), "Value", "Text");
+
+            ViewBag.CitizenList = new SelectList(
+                  db.Citizen
+                    .Select(c => new
+                    {
+                        Value = c.Code,
+                        Text = c.Code + " - " + c.Reference
+                    })
+                    .ToList(),
+                  "Value",
+                  "Text"
+              );
+            ViewBag.StateDivisionList = new SelectList(
+                db.StateDivision
+                  .Select(s => new
+                  {
+                      Value = s.Id, // or s.StateDivisionCode if you prefer
+                      Text = s.StateDivisionCode + " - " + s.StateDivisionName
+                  })
+                  .ToList(),
+                "Value",
+                "Text"
+            );
+
         }
         private void PopulateDropdownsIndex()
         {
@@ -534,35 +546,73 @@ namespace CallCenter.Controllers
         }
 
         [HttpGet]
-        public ActionResult ExportAllianceInboundCsv()
+        public ActionResult ExportAllianceInboundCsv(AllianceInboundIndexVM filter)
         {
-            var data = db.AllianceInbounds
-                         .OrderByDescending(x => x.AllianceInboundId)
-                         .ToList();
-
-            var sb = new StringBuilder();
-            var props = typeof(AllianceInbound).GetProperties();
-
-            // Header
-            sb.AppendLine(string.Join(",", props.Select(p => p.Name)));
-
-            // Rows
-            foreach (var row in data)
+            try
             {
-                sb.AppendLine(string.Join(",", props.Select(p =>
-                    $"\"{(p.GetValue(row)?.ToString() ?? string.Empty).Replace("\"", "\"\"")}\""
-                )));
+                var data = customerRepository.GetDataAllExcel();
+
+                //Filter data
+                if (filter.FromDate.HasValue)
+                    data = data.Where(x => x.DateTime.Date >= filter.FromDate.Value.Date);
+
+                if (filter.ToDate.HasValue)
+                    data = data.Where(x => x.DateTime.Date <= filter.ToDate.Value.Date);
+
+                if (!string.IsNullOrEmpty(filter.PhoneNumber))
+                    data = data.Where(x => x.PhoneNumber.Contains(filter.PhoneNumber));
+
+                if (!string.IsNullOrWhiteSpace(filter.TicketTypeId))
+                {
+                    int.TryParse(filter.TicketTypeId, out int tcktTypeId);
+                    data = data.Where(x => x.TicketTypeId == tcktTypeId);
+                }
+
+                if (!string.IsNullOrWhiteSpace(filter.TicketStatusId))
+                {
+                    int.TryParse(filter.TicketStatusId, out int tcktStatusId);
+                    data = data.Where(x => x.TicketStatusId == tcktStatusId);
+                }
+
+                if (!string.IsNullOrEmpty(filter.TicketId))
+                    data = data.Where(x => x.TicketID == filter.TicketId);
+
+
+                // Columns to hide
+                var excludedColumns = new HashSet<string>
+                {
+                    "TicketTypeId",
+                    "TicketStatusId"
+                };
+
+                var sb = new StringBuilder();
+                var props = typeof(AllianceInboundExcelModel).GetProperties().Where(p => !excludedColumns.Contains(p.Name)).ToArray();
+
+                // Header
+                sb.AppendLine(string.Join(",", props.Select(p => p.Name)));
+
+                // Rows
+                foreach (var row in data)
+                {
+                    sb.AppendLine(string.Join(",", props.Select(p =>
+                        $"\"{(p.GetValue(row)?.ToString() ?? string.Empty).Replace("\"", "\"\"")}\""
+                    )));
+                }
+
+                var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+
+                Response.Clear();
+                Response.Buffer = true;
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader("Content-Disposition", "attachment; filename=AllianceInbound.csv");
+                Response.BinaryWrite(bytes);
+                Response.Flush();
+                Response.SuppressContent = false;
             }
+            catch (Exception ex)
+            {
 
-            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
-
-            Response.Clear();
-            Response.Buffer = true;
-            Response.ContentType = "application/octet-stream";
-            Response.AddHeader("Content-Disposition", "attachment; filename=AllianceInbound.csv");
-            Response.BinaryWrite(bytes);
-            Response.Flush();
-            Response.SuppressContent = false;
+            }
 
             return new EmptyResult();
         }
@@ -572,6 +622,20 @@ namespace CallCenter.Controllers
             return value?
                 .Replace("\u00A0", " ")
                 .Trim();
+        }
+
+        public JsonResult GetTownshipsByStateDivision(int stateDivisionCode)
+        {
+            var townships = db.Township
+                              .Where(t => t.StateDivisionCode == stateDivisionCode)
+                              .Select(t => new
+                              {
+                                  Value = t.TownshipCode,
+                                  Text = t.TownshipCode + " - " + t.TownshipName
+                              })
+                              .ToList();
+
+            return Json(townships, JsonRequestBehavior.AllowGet);
         }
 
     }
