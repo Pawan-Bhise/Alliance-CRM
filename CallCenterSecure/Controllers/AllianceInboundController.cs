@@ -62,6 +62,35 @@ namespace CallCenter.Controllers
                 string ticketID = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
                 allianceInbound.TicketID = ticketID;
 
+
+
+                //Conditional NA
+                if (allianceInbound.TicketType == "1" && string.IsNullOrWhiteSpace(allianceInbound.Na_Disposition))// NA
+                {
+                    ModelState.AddModelError("Na_Disposition", "Na disposition is required.");
+                }
+
+                if (allianceInbound.TicketType == "2")//Lead
+                {
+                    if (string.IsNullOrWhiteSpace(allianceInbound.Lead_CustomerName))
+                    {
+                        ModelState.AddModelError("Lead_CustomerName", "Lead customer name is required.");
+                    }
+                    if (string.IsNullOrWhiteSpace(allianceInbound.Lead_PrimaryMobileNumber))
+                    {
+                        ModelState.AddModelError("Lead_PrimaryMobileNumber", "Lead primary mobile number is required.");
+                    }
+                    if (string.IsNullOrWhiteSpace(allianceInbound.Lead_LeadStatus))
+                    {
+                        ModelState.AddModelError("Lead_LeadStatus", "Lead status is required.");
+                    }
+                }
+                //CMP
+                if (allianceInbound.TicketType == "3" && string.IsNullOrWhiteSpace(allianceInbound.Cmp_Disposition))//Complaint
+                {
+                    ModelState.AddModelError("Cmp_Disposition", "Cmp disposition is required.");
+                }
+
                 if (ModelState.IsValid)
                 {
                     if (allianceInbound.File != null && allianceInbound.File.ContentLength > 0)
@@ -118,6 +147,7 @@ namespace CallCenter.Controllers
 
             //clear spacing
             allianceInbound.Cmp_Branch = Normalize(allianceInbound.Cmp_Branch);
+            allianceInbound.Cmp_Disposition = Normalize(allianceInbound.Cmp_Disposition);
 
             PopulateDropdowns();
 

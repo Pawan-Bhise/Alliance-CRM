@@ -101,7 +101,7 @@ namespace CallCenter.Models
         public string Lead_Priority { get; set; }
         [Display(Name = "Client Officer Name")]
         public string Lead_ClientOfficerName { get; set; }
-        [Display(Name = "Lead Lead Status")]
+        [Display(Name = "Lead Status")]
         public string Lead_LeadStatus { get; set; }
 
         // Complain Fields

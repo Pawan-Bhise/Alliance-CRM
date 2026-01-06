@@ -48,7 +48,7 @@ namespace CallCenterSecure.Repositories
                 ai.Lead_Gender,ai.Lead_MaritalStatus,ai.Lead_SpouseName,ai.Lead_ClientOfficerName,ai.Lead_LeadStatus,
                 ai.Prev_TicketId,cds.Description as Cmp_Designation, ncs.ComplaintsDescrption as Cmp_NatureOfComplaint,
 
-                ndisp.Name AS Na_Disposition, ai.NRC
+                ndisp.Name AS Na_Disposition, ai.NRC, cmpdisp.Name AS cmp_Disposition
                 from AllianceInbounds ai
                 LEFT JOIN CallObjectives co on co.Id=ai.CallObjective
                 LEFT JOIN Products p on p.Id=ai.[Product]
@@ -65,6 +65,7 @@ namespace CallCenterSecure.Repositories
 				LEFT JOIN ComplaintDesignations cds on cds.ComplaintDesignationId = ai.Cmp_Designation
 				LEFT JOIN NatureOfComplaints ncs on ncs.ComplaintId = ai.Cmp_NatureOfComplaint 
                 LEFT JOIN NaDispositions ndisp ON ndisp.Id=ai.Na_Disposition
+                LEFT JOIN CmpDispositions cmpdisp ON cmpdisp.Id=ai.cmp_Disposition
                 where ai.AllianceInboundId=@id;";
 
                 return con.Query<AllianceInbound>(sql, new { Id = id });
