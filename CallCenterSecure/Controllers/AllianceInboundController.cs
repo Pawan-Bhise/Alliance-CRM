@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;   // or Npgsql/MySql depending on DB
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -62,7 +63,15 @@ namespace CallCenter.Controllers
                 string ticketID = Guid.NewGuid().ToString("N").Substring(0, 6).ToUpper();
                 allianceInbound.TicketID = ticketID;
 
-
+                //assign id ot region and branch
+                if (allianceInbound.RegionId > 0)
+                {
+                    allianceInbound.Region = Convert.ToString(allianceInbound.RegionId);
+                }
+                if (allianceInbound.BranchId > 0)
+                {
+                    allianceInbound.Branch = Convert.ToString(allianceInbound.BranchId);
+                }
 
                 //Conditional NA
                 if (allianceInbound.TicketType == "1" && string.IsNullOrWhiteSpace(allianceInbound.Na_Disposition))// NA
@@ -149,6 +158,12 @@ namespace CallCenter.Controllers
             allianceInbound.Cmp_Branch = Normalize(allianceInbound.Cmp_Branch);
             allianceInbound.Cmp_Disposition = Normalize(allianceInbound.Cmp_Disposition);
 
+            int.TryParse(allianceInbound.Region, out int regionId);
+            allianceInbound.RegionId = regionId;
+
+            int.TryParse(allianceInbound.Branch, out int branchId);
+            allianceInbound.BranchId = branchId;
+
             PopulateDropdowns();
 
             return View(allianceInbound);
@@ -166,6 +181,16 @@ namespace CallCenter.Controllers
                 {
                     //Verify if Prev Ticket Id provided
                     //If exist create new ticket
+
+                    //assign id ot region and branch
+                    if (allianceInbound.RegionId > 0)
+                    {
+                        allianceInbound.Region = Convert.ToString(allianceInbound.RegionId);
+                    }
+                    if (allianceInbound.BranchId > 0)
+                    {
+                        allianceInbound.Branch = Convert.ToString(allianceInbound.BranchId);
+                    }
 
                     if (allianceInbound.File != null && allianceInbound.File.ContentLength > 0)
                     {
@@ -226,7 +251,7 @@ namespace CallCenter.Controllers
             //.Distinct()
             //.ToList();
 
-            ViewBag.CascadeRegion = new SelectList(db.RegionBranches.Select(c => new { Value = c.Region, Text = c.Region }).Distinct(), "Value", "Text");
+            ViewBag.CascadeRegion = new SelectList(db.RegionBranches.Select(c => new { Value = c.Id, Text = c.Region }).Distinct(), "Value", "Text");
             //ViewBag.Branches = new SelectList(db.AllianceBranches.Select(b => new { Value = b.BranchName, Text = b.BranchName }), "Value", "Text");
             //ViewBag.Branches = new SelectList(db.RegionBranches.Select(b => new { Value = b.BranchName, Text = b.BranchName }).ToList(), "Value", "Text");
 
@@ -243,14 +268,14 @@ namespace CallCenter.Controllers
             ViewBag.Branches = new SelectList(
             db.RegionBranches
               .Where(d => d.BranchName != null && d.BranchName != "")
-              .Select(d => d.BranchName)
+              .Select(d => new { d.Id, d.BranchName })
               .Distinct()
               .OrderBy(d => d)
               .ToList() // ⭐ VERY IMPORTANT (execute SQL here)
               .Select(d => new
               {
-                  Value = Normalize(d),
-                  Text = Normalize(d)
+                  Value = d.Id,
+                  Text = Normalize(d.BranchName)
               }),
                     "Value",
             "Text"
@@ -334,8 +359,12 @@ namespace CallCenter.Controllers
             if (filter.ToDate.HasValue)
                 query = query.Where(x => x.DateTime.Date <= filter.ToDate.Value.Date);
 
-            if (!string.IsNullOrEmpty(filter.PhoneNumber))
-                query = query.Where(x => x.PhoneNumber.Contains(filter.PhoneNumber));
+            if (!string.IsNullOrWhiteSpace(filter.PhoneNumber))
+            {
+                query = query.Where(x =>
+                    x.PhoneNumber != null &&
+                    x.PhoneNumber.Contains(filter.PhoneNumber));
+            }
 
             if (!string.IsNullOrWhiteSpace(filter.TicketTypeId))
                 query = query.Where(x => x.TicketTypeId == filter.TicketTypeId);

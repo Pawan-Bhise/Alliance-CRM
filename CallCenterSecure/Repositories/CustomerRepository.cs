@@ -29,7 +29,7 @@ namespace CallCenterSecure.Repositories
 
                 string sql = @"
                 select ai.AllianceInboundId,ai.DateTime,ai.TicketID,
-                co.Name AS CallObjective, ai.Region,ai.Branch,ai.ClientName,ai.PhoneNumber,
+                co.Name AS CallObjective,reg.Region AS Region,brn.BranchName Branch,ai.ClientName,ai.PhoneNumber,
                 ai.Address,
                 o.Name as Origin,
                 p.Name AS [Product], ai.DetailConversation, ai.Response,
@@ -66,6 +66,8 @@ namespace CallCenterSecure.Repositories
 				LEFT JOIN NatureOfComplaints ncs on ncs.ComplaintId = ai.Cmp_NatureOfComplaint 
                 LEFT JOIN NaDispositions ndisp ON ndisp.Id=ai.Na_Disposition
                 LEFT JOIN CmpDispositions cmpdisp ON cmpdisp.Id=ai.cmp_Disposition
+                LEFT JOIN RegionBranches reg ON reg.Id=TRY_CAST(ai.Region AS INT)
+                LEFT JOIN RegionBranches brn on brn.Id=TRY_CAST(ai.branch AS INT)
                 where ai.AllianceInboundId=@id;";
 
                 return con.Query<AllianceInbound>(sql, new { Id = id });

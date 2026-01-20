@@ -20,9 +20,16 @@ namespace CallCenter.Models
         [Display(Name = "Call Objective")]
         public string CallObjective { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Region is required")]
+        [Display(Name = "Region")]
+        public int? RegionId { get; set; }
+        
         public string Region { get; set; }
+        [NotMapped]
         [Required(ErrorMessage = "Branch is required")]
+        [Display(Name = "Branch")]
+        public int? BranchId { get; set; }        
         public string Branch { get; set; }
 
         [Display(Name = "Client Name")]

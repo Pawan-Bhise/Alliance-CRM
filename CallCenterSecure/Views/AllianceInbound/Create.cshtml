@@ -51,24 +51,24 @@
             <!-- Region -->
             <div class="form-group row mb-3">
                 <label class="col-md-4 col-form-label">
-                    @Html.DisplayNameFor(m => m.Region) <span class="text-danger">*</span>
+                    @Html.DisplayNameFor(m => m.RegionId) <span class="text-danger">*</span>
                 </label>
                 <div class="col-md-8">
-                    @Html.DropDownListFor(m => m.Region, (SelectList)ViewBag.CascadeRegion,
-                        "Select Region", new { @class = "form-control", id = "Region" })
-                    @Html.ValidationMessageFor(m => m.Region, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(m => m.RegionId, (SelectList)ViewBag.CascadeRegion,
+                        "Select Region", new { @class = "form-control"})
+                    @Html.ValidationMessageFor(m => m.RegionId, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <!-- Branch -->
             <div class="form-group row mb-3">
                 <label class="col-md-4 col-form-label">
-                    @Html.DisplayNameFor(m => m.Branch) <span class="text-danger">*</span>
+                    @Html.DisplayNameFor(m => m.BranchId) <span class="text-danger">*</span>
                 </label>
                 <div class="col-md-8">
-                    @Html.DropDownListFor(m => m.Branch, (SelectList)ViewBag.Branches,
+                    @Html.DropDownListFor(m => m.BranchId, (SelectList)ViewBag.Branches,
                         "Select Branch", new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Branch, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.BranchId, "", new { @class = "text-danger" })
                 </div>
             </div>
 
