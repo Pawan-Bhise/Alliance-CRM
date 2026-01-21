@@ -14,7 +14,7 @@ namespace CallCenterSecure.Models
         // === Edited by waqarahmedansari06@gmail.com ===
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd} hh:mm:ss")]
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public DateTime? DateTime { get; set; }
 
         //[Required]
         public string TicketID { get; set; }
@@ -69,8 +69,8 @@ namespace CallCenterSecure.Models
         public DateTime? CallStartDateTime { get; set; }
         public DateTime? CallEndDateTime { get; set; }
         public int? Duration { get; set; }
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
-        public DateTime ModifiedOn { get; set; } = DateTime.Now;
+        public DateTime? CreatedOn { get; set; } //= DateTime.Now;
+        public DateTime? ModifiedOn { get; set; } //= DateTime.Now;
 
         [NotMapped]
         public List<AllianceOutbound> AllianceOutboundList { get; set; }
